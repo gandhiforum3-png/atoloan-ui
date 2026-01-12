@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <!--<link
+      rel="stylesheet"
+      href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />-->
+    
+     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Ato Loans</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css-HIDDEN" rel="stylesheet">
+    
+    
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+            <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/loanform.css" />
+	  
+	  <style>
+		.iframeVideo { height: 0px; padding-top: 25px; padding-bottom: 56.2%; position: relative; }
+		.iframeVideo iframe { width: 100%; height: 100%; position: absolute; }
+	  </style>
+    
+
+<script>
+
+if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+}
+
+function validateForm5() {
+  if (document.page5.ssnoritin.selectedIndex=="") {
+    alert("Se deben ingresar los últimos 4 dígitos del SSN o ITIN.");
+    return false;
+  }
+  if (document.page5.employmenttype.selectedIndex=="") {
+    alert("Seleccionar tipo de empleo.");
+    return false;
+  }
+  if (document.page5.paymenttype.selectedIndex=="" && document.page5.paymenttypeself.selectedIndex=="" && document.page5.paymenttyperetired.selectedIndex=="") {
+    alert("Seleccione el tipo de prueba de ingresos.");
+    return false;
+  }
+  if (document.page5.monthlyincome.selectedIndex=="") {
+    alert("Seleccione Ingreso Mensual.");
+    return false;
+  }
+  if (document.page5.monthlyincome.selectedIndex=="8" && document.forms["page5"]["othermonthlyincome"].value=="" ) {
+    alert("Seleccione Ingreso Mensual.");
+    return false;
+  }
+  if (document.page5.employmenttype.selectedIndex!="5" && document.page5.employmenttype.selectedIndex!="7" && document.page5.timeatjob.selectedIndex=="") {
+    alert("Seleccionar tiempo en el trabajo.");
+    return false;
+  }
+  if (document.page5.employmenttype.selectedIndex!="5" && document.page5.employmenttype.selectedIndex!="7"  && document.page5.timeatjob.selectedIndex=="3" && document.forms["page5"]["othertimeatjob"].value=="") {
+    alert("Seleccionar tiempo en el trabajo.");
+    return false;
+  }
+  if (document.page5.employmenttype.selectedIndex!="5" && document.page5.employmenttype.selectedIndex!="7" && 	document.forms["page5"]["jobtitle"].value=="") {
+    alert("Ingrese el título del trabajo.");
+    return false;
+  }
+  if (document.page5.havedriverslicense.selectedIndex=="") {
+    alert("Seleccione si tiene una licencia de conducir vigente.");
+    return false;
+  }
+  if (document.page5.downpayment.selectedIndex=="") {
+    alert("Seleccione el monto del pago inicial.");
+    return false;
+  }
+  let vin = document.forms["page5"]["vin"].value;
+  if (vin == "") {
+    alert("ngrese el número de inventario del automóvil");
+    return false;
+  }
+	
+
+    if (document.page5.downpayment.selectedIndex=="7" && document.forms["page5"]["otherdownpayment"].value == "") {
+    alert("Debe ingresar el monto del pago inicial.");
+    return false;
+  }
+    
+  
+    
+}
+	
+function validateForm9() {
+  let jobtitle = document.forms["page9"]["jobtitle"].value;
+  let othertimeatjob = document.forms["page9"]["othertimeatjob"].value;
+  let timeatjob = document.forms["page9"]["timeatjob"].value;
+  if (timeatjob == "none") {
+    alert("Debes seleccionar la hora en el trabajo.");
+    return false;
+  }
+  if (othertimeatjob == "" && timeatjob == "lessthanayear") {
+    alert("Debes ingresar meses en el trabajo.");
+    return false;
+  }
+  if (jobtitle == "") {
+    alert("Debes centrar un puesto de trabajo.");
+    return false;
+  }
+}
+	
+function validateForm91() {
+  let jobtitlecosigner = document.forms["page91"]["jobtitlecosigner"].value;
+  let othertimeatjobcosigner = document.forms["page91"]["othertimeatjobcosigner"].value;
+  let timeatjobcosigner = document.forms["page91"]["timeatjobcosigner"].value;
+  if (timeatjobcosigner == "none") {
+    alert("Debes seleccionar la hora en el trabajo.");
+    return false;
+  }
+  if (othertimeatjobcosigner == "" && timeatjobcosigner == "lessthanayear") {
+    alert("Debes ingresar meses en el trabajo.");
+    return false;
+  }
+  if (jobtitlecosigner == "") {
+    alert("Debes centrar un puesto de trabajo.");
+    return false;
+  }
+}
+
+function validateForm11() {
+  if (document.page11.monthlyincome.selectedIndex=="") {
+    alert("Seleccione su ingreso mensual.");
+    return false;
+  }
+}
+	
+function validateForm111() {
+  let vin = document.forms["page111"]["vin"].value;
+  if (vin == "") {
+    //alert("Debes ingresar un número de stock.");
+    //return false;
+  }
+}
+
+function validateForm13() {
+  var downpaymentradio = document.getElementsByName("downpayment");
+    var radioSelected = false;
+    var i = 0;
+    while (!radioSelected && i < downpaymentradio.length) {
+        if (downpaymentradio[i].checked) radioSelected = true;
+        i++;        
+    }
+    var otherdownpayment = document.forms["page13"]["otherdownpayment"].value;
+    if (!radioSelected && otherdownpayment=="") {
+		alert("Introduzca un importe de pago inicial.");
+    	return radioSelected;
+    }
+}
+
+function validateForm14() {
+  let monthlydebt = document.forms["page14"]["monthlydebt"].value;
+  let monthlyincome = document.forms["page14"]["monthlyincome"].value;
+  if (monthlydebt == "") {
+    //alert("Debes ingresar tu Deuda Mensual Recurrente");
+    //return false;
+  }
+  if (monthlydebt != "" && isNaN(monthlydebt)) {
+    alert("Debes ingresar un número.");
+    return false;
+  }
+  if (monthlyincome == "") {
+    //alert("Debes ingresar tu Ingreso Bruto Mensual");
+    //return false;
+  }
+  if (monthlyincome != "" && isNaN(monthlyincome)) {
+    alert("Debes ingresar un número.");
+    return false;
+  }
+}
+
+function validateForm15() {
+  let howlongsincerepo = document.forms["page15"]["howlongsincerepo"].value;
+  let howlongsincerepocontainer = document.getElementById('howlongsincerepocontainer');
+  if (howlongsincerepo == "" && howlongsincerepocontainer.style.display != "none") {
+    alert("Debe ingresar años/meses desde su repositorio");
+    return false;
+  }
+}
+
+function validateForm15cosigner() {
+  let howlongsincerepocosigner = document.forms["page15cosigner"]["howlongsincerepocosigner"].value;
+  let howlongsincerepocontainercosigner = document.getElementById('howlongsincerepocontainercosigner');
+  if (howlongsincerepocosigner == "" && howlongsincerepocontainercosigner.style.display != "none") {
+    alert("Debe ingresar años/meses desde su repositorio de cosignatario");
+    return false;
+  }
+}
+
+function validateForm17() {
+  let zipcode = document.forms["page17"]["zipcode"].value;
+  if (zipcode == "") {
+    alert("Debe ingresar como código postal.");
+    return false;
+  }
+    
+}
+
+function validateForm19() {
+  let firstname = document.forms["page19"]["firstname"].value;
+  if (firstname == "") {
+    alert("Ingrese su nombre");
+    return false;
+  }
+  let lastname = document.forms["page19"]["lastname"].value;
+  if (lastname == "") {
+    alert("Ingrese su apellido");
+    return false;
+  }
+  let email = document.forms["page19"]["email"].value;
+  if (email == "") {
+    alert("Ingrese su correo electrónico");
+    return false;
+  }
+  let address = document.forms["page19"]["address"].value;
+  if (address == "") {
+    alert("Ingrese su dirección");
+    return false;
+  }
+  let city = document.forms["page19"]["city"].value;
+  if (city == "") {
+    alert("Ingrese su ciudad");
+    return false;
+  }
+  if (document.page19.state.selectedIndex=="") {
+    alert("Ingrese su estado");
+    return false;
+  }
+    
+}
+
+function validateForm20() {
+  /*
+  let enterssnoritin = document.forms["page20"]["enterssnoritin"].value;
+  if (enterssnoritin == "") {
+    alert("Debe ingresar sus SSN o ITIN.");
+    return false;
+  }
+      */
+  if (!document.getElementById('agreeauthorizedconsent').checked) {
+    alert("Debe aceptar el consentimiento autorizado.");
+    return false;
+  }
+  if (!document.getElementById('agreenda').checked) {
+    alert("Debe confirmar el acuerdo de confidencialidad.");
+    return false;
+  }
+  
+}
+	
+
+function signupDemoForm() {
+  let dealershipname = document.forms["signupdemo"]["dealershipname"].value;
+  if (dealershipname == "") {
+    alert("Debes ingresar el nombre del concesionario..");
+    return false;
+  }
+  let firstname = document.forms["signupdemo"]["firstname"].value;
+  if (firstname == "") {
+    alert("Debes ingresar tu nombre.");
+    return false;
+  }
+  let lastname = document.forms["signupdemo"]["lastname"].value;
+  if (lastname == "") {
+    alert("Debes ingresar tu apellido.");
+    return false;
+  }
+  let email = document.forms["signupdemo"]["email"].value;
+  if (email == "") {
+    alert("Debes ingresar tu correo electrónico.");
+    return false;
+  }
+  let phone = document.forms["signupdemo"]["phone"].value;
+  if (phone == "") {
+    alert("Debes ingresar tu teléfono.");
+    return false;
+  }
+}
+
+	
+function validateFormHomepage() {
+  let selectloantype = document.forms["homeloantypeform"]["loantype"].value;
+  let zipcode = document.forms["homeloantypeform"]["zipcode"].value;
+  if (selectloantype == "select") {
+    alert("Debe seleccionar el tipo de préstamo.");
+    return false;
+  }
+  if (zipcode == "") {
+    alert("Debes ingresar un código postal");
+    return false;
+  }
+}
+	
+
+function updateItem(rownumber) {
+	sessionStorage.item[rownumber] = "Lorem ipsum";
+	var user = sessionStorage.getItem("item[rownumber]");
+}
+
+function updateAmount(rownumber) {
+	alert(rownumber);
+}
+	
+
+$( document ).ready(function() {
+	$('#otherdownpayment').click(function () {
+    	$('input[name="downpayment"]').prop("checked", false);
+	});
+	$('#employmenttype').change(function () {
+	    if($(this).val() == "select"){
+	        $("#paymenttype").show();
+     		$("#paymenttypeself").hide();
+     		$("#paymenttyperetired").hide();
+     		$("#timeatjobcontainer").show();
+ 		}
+    	if($(this).val() == "fulltime" || $(this).val() == "parttime" || $(this).val() == "tempseasonal" ||  $(this).val() == "military"){
+     		$("#paymenttype").show();
+     		$("#paymenttypeself").hide();
+     		$("#paymenttyperetired").hide();
+     		$("#timeatjobcontainer").show();
+ 		}
+ 		if($(this).val() == "selfemployed"){
+     		$("#paymenttype").hide();
+     		$("#paymenttypeself").show();
+     		$("#paymenttyperetired").hide();
+     		$("#timeatjobcontainer").show();
+ 		}
+ 		if($(this).val() == "ssiretired" || $(this).val() == "disability"){
+     		$("#paymenttype").hide();
+     		$("#paymenttypeself").hide();
+     		$("#paymenttyperetired").show();
+     		$("#timeatjobcontainer").hide();
+ 		}
+	});
+	$('#employmenttypecosigner').change(function () {
+	    if($(this).val() == "select"){
+	        $("#paymenttypecosigner").show();
+     		$("#paymenttypeselfcosigner").hide();
+     		$("#paymenttyperetiredcosigner").hide();
+     		$("#timeatjobcontainercosigner").show();
+ 		}
+    	if($(this).val() == "fulltime" || $(this).val() == "parttime" || $(this).val() == "tempseasonal" ||  $(this).val() == "military"){
+     		$("#paymenttypecosigner").show();
+     		$("#paymenttypeselfcosigner").hide();
+     		$("#paymenttyperetiredcosigner").hide();
+     		$("#timeatjobcontainercosigner").show();
+ 		}
+ 		if($(this).val() == "selfemployed"){
+     		$("#paymenttypecosigner").hide();
+     		$("#paymenttypeselfcosigner").show();
+     		$("#paymenttyperetiredcosigner").hide();
+     		$("#timeatjobcontainercosigner").show();
+ 		}
+ 		if($(this).val() == "ssiretired" || $(this).val() == "disability"){
+     		$("#paymenttypecosigner").hide();
+     		$("#paymenttypeselfcosigner").hide();
+     		$("#paymenttyperetiredcosigner").show();
+     		$("#timeatjobcontainercosigner").hide();
+ 		}
+	});
+	$('#monthlyincome').change(function () {
+	    if($(this).val() == "select"){
+     		$("#othermonthlyincome").hide();
+ 		}
+    	if($(this).val() == "otheramount"){
+     		$("#othermonthlyincome").show();
+ 		}
+ 		if($(this).val() != "otheramount"){
+     		$("#othermonthlyincome").hide();
+ 		}
+	});
+	$('#monthlyincomecosigner').change(function () {
+	    if($(this).val() == "select"){
+     		$("#othermonthlyincomecosigner").hide();
+ 		}
+    	if($(this).val() == "otheramount"){
+     		$("#othermonthlyincomecosigner").show();
+ 		}
+ 		if($(this).val() != "otheramount"){
+     		$("#othermonthlyincomecosigner").hide();
+ 		}
+	});
+	$('#timeatjob').change(function () {
+	    if($(this).val() == "select"){
+     		$("#othertimeatjob").hide();
+ 		}
+    	if($(this).val() == "otheramount"){
+     		$("#othertimeatjob").show();
+ 		}
+ 		if($(this).val() != "otheramount"){
+     		$("#othertimeatjob").hide();
+ 		}
+ 		if($(this).val() == "1-6months"){
+     		$("#howlongtimeatjob").show();
+ 		}
+ 		if($(this).val() != "1-6months"){
+     		$("#howlongtimeatjob").hide();
+ 		}
+	});
+	$('#timeatjobcosigner').change(function () {
+	    if($(this).val() == "select"){
+     		$("#othertimeatjobcosigner").hide();
+ 		}
+    	if($(this).val() == "otheramount"){
+     		$("#othertimeatjobcosigner").show();
+ 		}
+ 		if($(this).val() != "otheramount"){
+     		$("#othertimeatjobcosigner").hide();
+ 		}
+ 		if($(this).val() == "1-6months"){
+     		$("#howlongtimeatjobcosigner").show();
+ 		}
+ 		if($(this).val() != "1-6months"){
+     		$("#howlongtimeatjobcosigner").hide();
+ 		}
+	});
+	$('#downpayment').change(function () {
+	    if($(this).val() == "select"){
+     		$("#otherdownpayment").hide();
+ 		}
+    	if($(this).val() == "otheramount"){
+     		$("#otherdownpayment").show();
+ 		}
+ 		if($(this).val() != "otheramount"){
+     		$("#otherdownpayment").hide();
+ 		}
+	});
+	$('#monthlydebt').change(function () {
+	    if($('#monthlyincome').val() != "" && $('#monthlydebt').val() != ""){
+	    	var dti = 0;
+	    	var monthlyincome = $('#monthlyincome').val();
+	    	var monthlydebt = $('#monthlydebt').val();
+	    	dti = Math.round((monthlydebt / monthlyincome) * 100);
+	    	$('#dticontainer').show();
+	    	if (isNaN(dti)) {
+	    		$('#dtitext').text('Por favor ingrese los números arriba');
+	    	} else {
+	    		$('#dtitext').text(dti + '%');
+	    	}
+	    	document.getElementById("dti").value = dti;
+	    } else {
+	    	$('#dticontainer').hide();
+	    }
+	});
+	$('#monthlyincome').change(function () {
+	    if($('#monthlyincome').val() != "" && $('#monthlydebt').val() != ""){
+	    	var dti = 0;
+	    	var monthlyincome = $('#monthlyincome').val();
+	    	var monthlydebt = $('#monthlydebt').val();
+	    	dti = Math.round((monthlydebt / monthlyincome) * 100);
+	    	$('#dticontainer').show();
+	    	if (isNaN(dti)) {
+	    		$('#dtitext').text('Please Enter Numbers Above');
+	    	} else {
+	    		$('#dtitext').text(dti + '%');
+	    	}
+	    	document.getElementById("dti").value = dti;
+	    } else {
+	    	$('#dticontainer').hide();
+	    }
+	});
+	
+	$('#monthlydebtcosigner').change(function () {
+	    if($('#monthlyincomecosigner').val() != "" && $('#monthlydebtcosigner').val() != ""){
+	    	var dticosigner = 0;
+	    	var monthlyincomecosigner = $('#monthlyincomecosigner').val();
+	    	var monthlydebtcosigner = $('#monthlydebtcosigner').val();
+	    	dticosigner = Math.round((monthlydebtcosigner / monthlyincomecosigner) * 100);
+	    	$('#dticontainercosigner').show();
+	    	if (isNaN(dticosigner)) {
+	    		$('#dtitextcosigner').text('Por favor ingrese los números arriba');
+	    	} else {
+	    		$('#dtitextcosigner').text(dticosigner + '%');
+	    	}
+	    	document.getElementById("dticosigner").value = dticosigner;
+	    } else {
+	    	$('#dticontainercosigner').hide();
+	    }
+	});
+	$('#monthlyincomecosigner').change(function () {
+	    if($('#monthlyincomecosigner').val() != "" && $('#monthlydebtcosigner').val() != ""){
+	    	var dticosigner = 0;
+	    	var monthlyincomecosigner = $('#monthlyincomecosigner').val();
+	    	var monthlydebtcosigner = $('#monthlydebtcosigner').val();
+	    	dticosigner = Math.round((monthlydebtcosigner / monthlyincomecosigner) * 100);
+	    	$('#dticontainercosigner').show();
+	    	if (isNaN(dticosigner)) {
+	    		$('#dtitextcosigner').text('Please Enter Numbers Above');
+	    	} else {
+	    		$('#dtitextcosigner').text(dticosigner + '%');
+	    	}
+	    	document.getElementById("dticosigner").value = dticosigner;
+	    } else {
+	    	$('#dticontainercosigner').hide();
+	    }
+	});
+	$('#repoyes').click(function () {
+		$("#repoyes").css('opacity', '0.5');
+    	$("#howlongsincerepocontainer").show();
+	});
+	$('#repoyescosigner').click(function () {
+		$("#repoyescosigner").css('opacity', '0.5');
+    	$("#howlongsincerepocontainercosigner").show();
+	});
+	
+	$('#othermonthlyincomebutton').click(function () {
+		$("#othermonthlyincomebutton").css('opacity', '0.5');
+    	$("#othermonthlyincomecontainer").show();
+	});
+	
+	$('#over2yearsbutton').click(function () {
+		$("#over2yearsbutton").css('opacity', '0.5');
+		$("#over2yearscontainer").show();
+		$("#12yearsbutton").css('opacity', '1');
+		$("#12yearscontainer").hide();
+		$("#othertimeatjobbutton").css('opacity', '1');
+		$("#othertimeatjobcontainer").hide();
+		$('#timeatjob').val('over2years');
+		$('#timeatjobcosigner').val('over2years');
+	});
+	
+	$('#12yearsbutton').click(function () {
+		$("#over2yearsbutton").css('opacity', '1');
+		$("#over2yearscontainer").hide();
+		$("#12yearsbutton").css('opacity', '.5');
+		$("#12yearscontainer").show();
+		$("#othertimeatjobbutton").css('opacity', '1');
+		$("#othertimeatjobcontainer").hide();
+		$('#timeatjob').val('1-2years');
+		$('#timeatjobcosigner').val('1-2years');
+	});
+	
+	$('#othertimeatjobbutton').click(function () {
+		$("#over2yearsbutton").css('opacity', '1');
+		$("#over2yearscontainer").hide();
+		$("#12yearsbutton").css('opacity', '1');
+		$("#12yearscontainer").hide();
+		$("#othertimeatjobbutton").css('opacity', '0.5');
+    	$("#othertimeatjobcontainer").show();
+		$('#timeatjob').val('lessthanayear');
+		$('#timeatjobcosigner').val('lessthanayear');
+	});
+	
+	$('#otheramountdownbutton').click(function () {
+		$("#otheramountdownbutton").css('opacity', '0.5');
+    	$("#otheramountdowncontainer").show();
+	});
+	
+	
+	setTimeout(function() {
+   $('.carloader').fadeOut(800);
+}, 1500);
+	
+});
+
+</script><script>
+  var o_options = {
+    domain: 'atoloans.outseta.com'
+  };
+</script>
+<script src="https://cdn.outseta.com/outseta.min.js"
+        data-options="o_options">
+</script></head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+           	 <a class="navbar-brand" href="index"><img src="images/atoloans.png" alt="Ato Loans" id="toplogo"></a><button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button><div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="index"><i class="fa fa-home" aria-hidden="true"></i> Hogar</a></li><li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="loans"><i class="fas fa-bank"></i> Obtener Pre-Aprobado</a></li><li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="loancalculator"><i class="fas fa-calculator"></i> Calculadora de Préstamos</a></li></ul></div><a href="?language=English&page=0"><img src="images/englishbutton.png" alt="English" class="imgbutton languagebutton" border="0"  /></a></div>
+        </nav>
+    <section id="last">
+      <!-- heading -->
+      <div class="full"><header class="masthead text-white text-center homehero">
+            <div class="container d-flex align-items-center flex-column" style="margin-top:-65px;" >
+			
+			<div class="col-sm-12 left">
+			
+                <h1 class="masthead-heading homeheadline">¡El auto nuevo comienza aquí!</h1><p style="text-align:left;"><ul class="homeherolist"><li>No se requiere información personal para las aprobaciones previas</li><li>Vea qué prestamista tiene las mejores tasas de interés</li ><li>Sin verificación de crédito</li><li>Una aprobación previa real</li></ul></p><p style="text-align:left;padding-top:30px;"><a href="loans"><img src="images/btn_esp_getpreapproved.png" alt="¡Obtenga una aprobación previa ahora!" class="homebutton img-fluid"></a></p></div>
+		   </div>
+        </header>
+		
+		<section class="page-section" style="background-color:#fff;text-align:center;">
+      <div class="container">
+	  <img src="images/esp_getpreapproved.png" alt="Get Pre-Approved In 9 Clicks" style="padding-bottom:25px;text-align:center;" class="img-fluid">
+	  <h2 style="text-align:center;font-size:40px;padding-bottom:50px;"><h2 style="text-align:left;font-size:50px;padding-top:30px;">Obtenga aprobación previa En 9 clics funciona</h2><h3 style="text-align:left;padding:10px 0 10px;">Fácil, rápido y "sin necesidad de <br/> información personal
+."</h3></h2>
+            <div class="row">
+			<div class="col-sm-2"></div>
+  <div class="col-sm-8"><img src="images/tablet2.png" alt="Tablet" style="width:100%;height:auto;padding-bottom:75px;text-align:center;" class="img-fluid">
+		<div class="col-sm-2"></div>
+		</div>
+  </div>
+</div>
+</section>
+		
+		
+		       <section class="page-section" style="background-color:#fff;margin-top:-200px;">
+      <div class="container">    
+            
+            <div class="row">
+  <div class="col-sm-12">
+    <h2 style="text-align:center;font-size:40px;">Aprenda Cómo Funciona</h2>
+  <div class="iframeVideo" style="padding-top:40px;">
+				<iframe src="https://www.youtube.com/embed/3cOlceyTlJc?si=HWkOFHjr8RZ1bFyK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+	</div>
+  </div>
+</div><section class="page-section" style="border-bottom: solid 0px #000;padding-bottom:0px;padding-top:150px;">
+            <div class="container">
+
+
+            
+   <div class="row">
+  <div class="col-sm-4"><h2 style="text-align:left;font-size:42px;">La Forma Inteligente de Asegurar el Financiamiento de Automóviles</h2><p><ul><li style="font-size:22px;">Nunca nos proporcione nada de<br/>información personal antes de la aprobación previa.</li><li style="font-size:22px;">Una aprobación previa real.</li><li style= "font-size:22px;">Finanzas transparentes.</li><li style="font-size:22px;">Seguro y confidencial.</li></p>
+  </div>
+
+  <div class="col-sm-4"><img src="images/womanlaptop.jpg" alt="Woman on Laptop" class="img-fluid">
+</div>
+
+  <div class="col-sm-4"><h2 style="text-align:left;font-size:42px;">Bienvenido a<br/>venta minorista digital</h2><p><ul><li style="font-size: 22px;">Rápido, fácil, seguro.</li><li style="font-size:22px;">Vea quien tiene mejores intereses.</li><li style="font-size:22px;">Sin verificación de crédito.</li><li style="font-size:22px; ">Suba documentos de manera <br/>fácil y segura.</li></p>
+  </div>
+</div>
+      </div>  
+      </div>
+      
+      
+<section class="page-section" style="background-color:#2f3d4f;position:relative;">
+<div class="container">
+
+<div class="row">
+
+<div class="col-sm-6">
+<img src="images/tablet2.png" alt="Tablet" style="width:100%;height:auto;padding-bottom:75px;">
+</div>
+
+<div class="col-sm-6" style="padding: 0 30px 50px 30px;">
+<p style="font-size:22px;line-height:34px;color:#fff;">Bienvenido a atoloans, el programa del futuro de pre-aprobaciones de préstamos de autos que elimina las dudas sobre cual financiera tiene los mejores intereses. Nuestro programa lo conecta con los mejores prestamistas automá ticamente sin datos personales atrás de 1,000+ más principales de credit unions y bancos. Con solo responder 9 preguntas (basadas en factores de aprobación en tiempo real), facilitamos y mejoramos una aprobación rápida. Bienvenido a FINANCIERO DIGITAL, que aporta un enfoque más humano en el financiamiento de automóviles, nos centramos en una experiencia centrada en el cliente a través de las mejores opciones financieras. Una arpbación previa real sin el esfuerzo!  </p><p style="font-size:22px;line-height :32px;color:#fff;"><ul><li style="font-size:20px;color:#fff;">Ofertas calificadas en minutos.</li><li style="font-size:20px;color:#fff;">Uso completamente gratuito.</li><li style="font-size:20px;color:#fff;">Red de prestamistas a nivel nacional.</li> <li style="font-size:20px;color:#fff;">Datos y privacidad asegurados.</li></ul></p><br/><p style="text-align:center;"><a href="loans"><img src="images/btn_esp_getstarted.png" alt="Get Started" class="homebutton img-fluid" style="height:70px;width:auto;float:left;cursor: pointer;"></a></p></div>
+
+
+</div>
+</div>  
+</div> 
+
+
+        <section class="page-section" style="margin-top:-100px;" >
+            <div class="container"><p style="font-size:23px;">Obtenga aprobaciones previas en minutos con tasas de interés de múltiples cooperativas de crédito en su área. ¡Vea qué cooperativa de crédito tiene las mejores tasas de interés sin que ellas administren su crédito! Uso completamente gratuito. Red de prestamistas a nivel nacional. Datos y privacidad asegurados.</p><div class="row">
+  <div class="col-sm-4" style="padding:35px;">
+   <p style="text-align:center;"><a href="loans"><img src="images/circleicon1.png" alt="Circle Icon 1" style="width:100%;height:auto;" class="img-fluid"></a></p>
+   <h3 style="text-align:center;">¡Una aprobación previa real sin el esfuerzo!</h3><p style="text-align:center;font-size:20px;">Reciba una aprobación previa real y personalizada y vea quien tiene los mejores intereses de múltiples cooperativas de crédito y bancos en su área.</p>
+  </div>
+
+    <div class="col-sm-4" style="padding:35px;">
+   <p style="text-align:center;"><a href="loans"><img src="images/circleicon2.png" alt="Circle Icon 2" style="width:100%;height:auto;" class="img-fluid"></a></p>
+   <h3 style="text-align:center;">Desde hacer clic y Listo</h3><p style="text-align:center;font-size:20px;">Una vez preaprobado, simplemente seleccione la institución financiera con el mejor interes y suba sus documentos requeridos y nuestro departamento de finanzas se comunicará con usted para la verificación de documentos.</p>
+</div>
+
+<div class="col-sm-4" style="padding:35px;">
+     <p style="text-align:center;"><a href="loans"><img src="images/circleicon3.png" alt="Circle Icon 3" style="width:100%;height:auto;" class="img-fluid"></a></p>
+   <h3 style="text-align:center;">Hazlo tuyo</h3><p style="text-align:center;font-size:20px;">¿Le entregan a domicilio su auto o recogelo? ¡Usted escoja!</p>
+  </div>
+</div><p style="text-align:center;"><a href="loans"><img src="images/btn_esp_getpreapproved.png" alt="¡Obtenga una aprobación previa ahora!" class="homebutton img-fluid"></a></p></div>
+        </section>   
+      </div>
+    </section>
+    
+            <!-- Footer-->
+        <footer class="footer text-center" style="margin-top:120px;">
+            <div class="container">
+				
+				<div style="text-align:center;"><a href="https://www.atoloans.com/terms" style="color:#fff;">Terms & Conditions / Privacy Policy</a></div>
+				
+                <div class="row">
+                    <!-- Footer Location-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        
+                    </div>
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0" style="display:none;">
+                        
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
+                    </div>
+                    <!-- Footer About Text-->
+                    <div class="col-lg-4">
+                       
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Copyright &copy; AtoLoans 2026</small></div>
+        </div>
+    
+        <script>
+        // Credit Score Range Slider
+		var slider = document.getElementById("creditscorerange");
+		var output = document.getElementById("score");
+		output.innerHTML = slider.value;
+		if (slider.value < 500) {
+		alert(slider.value);
+			document.getElementByClassName("slider::-moz-range-thumb").style.backgroundColor = "red";
+		}
+		slider.oninput = function() {
+  			output.innerHTML = this.value;
+		}
+		// Cosigner Credit Score Range Slider
+		var slidercosigner = document.getElementById("creditscorerangecosigner");
+		var outputcosigner = document.getElementById("scorecosigner");
+		outputcosigner.innerHTML = slidercosigner.value;
+		if (slidercosigner.value < 500) {
+		alert(slidercosigner.value);
+			document.getElementByClassName("slidercosigner::-moz-range-thumb").style.backgroundColor = "red";
+		}
+		slidercosigner.oninput = function() {
+  			outputcosigner.innerHTML = this.value;
+		}
+		
+		function upload_file(e) {
+    e.preventDefault();
+    ajax_file_upload(e.dataTransfer.files[0]);
+}
+   
+function file_explorer() {
+    document.getElementById('selectfile').click();
+}
+ 
+document.getElementById('selectfile').onchange = function() {
+    ajax_file_upload(document.getElementById('selectfile').files[0]);
+};
+ 
+function ajax_file_upload(file_obj) {
+    if(file_obj != undefined) {
+        var form_data = new FormData();                  
+        form_data.append('file', file_obj);
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "ajax.php", true);
+        xhttp.onload = function(event) {
+            oOutput = document.querySelector('.img-content');
+            if (xhttp.status == 200 && this.responseText != "error") {
+                oOutput.innerHTML = "<img src='"+ this.responseText +"' alt='Image' />";
+            } else {
+                oOutput.innerHTML = "Error occurred when trying to upload your file.";
+            }
+        }
+  
+        xhttp.send(form_data);
+    }
+}
+
+		
+        </script>
+    
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="js/confetti.js"></script>
+    </body>
+</html>     
