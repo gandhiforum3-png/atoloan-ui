@@ -5,15 +5,17 @@ import { useLanguage } from '../context/LanguageContext'
 const navLabels = {
   en: {
     home: 'Home',
-    preApproved: 'Get Pre-Approved',
+    preApproved: 'Loan',
     calculator: 'Loan Calculator',
+    ratesheet: 'Upload Ratesheet',
     toggleAlt: 'Espanol',
     toggleImg: '/images/espanolbutton.png',
   },
   es: {
     home: 'Hogar',
-    preApproved: 'Obtener Pre-Aprobado',
+    preApproved: 'Prestamo',
     calculator: 'Calculadora de Préstamos',
+    ratesheet: 'Subir Tarifario',
     toggleAlt: 'English',
     toggleImg: '/images/englishbutton.png',
   },
@@ -55,6 +57,11 @@ export default function Navbar() {
             <li className="nav-item mx-0 mx-lg-1">
               <NavLink className="nav-link py-3 px-0 px-lg-3 rounded" to="/loancalculator">
                 <i className="fas fa-calculator"></i> {labels.calculator}
+              </NavLink>
+            </li>
+            <li className="nav-item mx-0 mx-lg-1">
+              <NavLink className="nav-link py-3 px-0 px-lg-3 rounded" to="/ratesheetuploader">
+                <i className="fas fa-upload"></i> {labels.ratesheet}
               </NavLink>
             </li>
           </ul>

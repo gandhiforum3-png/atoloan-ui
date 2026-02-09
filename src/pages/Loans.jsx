@@ -1,610 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
-
-const copyByLanguage = {
-  en: {
-    loanTypeTitle: 'Select Loan Type',
-    autoLoans: 'Auto Loans',
-    autoRefinance: 'Auto Refinance',
-    cosignerTitle: 'Are You Applying With A Co-Signer?',
-    byMyself: 'By Myself',
-    withCosigner: 'With Co-Signer',
-    cosignerRelativeTitle: 'Is Your Co-Signer A Relative?',
-    relative: 'Relative',
-    nonRelative: 'Not Relative',
-    sameAddressTitle: 'Does Your Co-Signer Live At The Same Address?',
-    livesSameAddress: 'Lives At Same Address',
-    notSameAddress: "Doesn't Live At Same Address",
-    employmentTitle: 'Select Employment Type',
-    fullTime: 'Full Time',
-    partTime: 'Part Time',
-    tempSeasonal: 'Temp/Seasonal',
-    selfEmployed: 'Self Employed',
-    ssiRetired: 'SSI / Retired',
-    military: 'Military',
-    disability: 'Disability',
-    proofIncomeTitle: 'Select Proof Of Income Type',
-    paystub: 'Paystub',
-    w2: 'W2',
-    taxes: 'Taxes',
-    taxes2Years: 'Taxes 2 Years',
-    form1099: '1099',
-    proofBenefits: 'Proof Of Benefits',
-    rewardLetter: 'Reward Letter',
-    monthlyIncomeTitle: 'Select Monthly Income',
-    other: 'Other',
-    notProvided: 'Not provided',
-    monthlyAmountLabel: 'Monthly',
-    timeAtJobTitle: 'Choose Time At Job',
-    over2Years: 'Over 2 Years',
-    oneToTwoYears: '1-2 Years',
-    lessThanYear: 'Less Than A Year',
-    monthsLabel: 'Months',
-    driversLicenseTitle: "Do You Have A Current Driver's License?",
-    yes: 'Yes',
-    no: 'No',
-    downPaymentTitle: 'Select Down Payment Amount',
-    downPaymentLabel: 'Down',
-    enterDownPayment: 'Enter down payment amount',
-    ssnItinTitle: 'Do You Have A Social Security Number or An ITIN Number?',
-    socialSecurity: 'Social Security',
-    itin: 'ITIN',
-    dtiTitle: "Let's Calculate Your Debt To Income Ratio",
-    dtiDescription:
-      'Your debt-to-income ratio (DTI) is all your monthly debt payments divided by your gross monthly income. Recurring monthly debt can include things such as: car payments, credit cards, mortgage, personal loans, school loans, etc.',
-    dtiCalculatorTitle: 'Debt To Income Ratio Calculator',
-    recurringDebtLabel: 'Your Recurring Monthly Debt:',
-    grossIncomeLabel: 'Your Gross Monthly Income:',
-    skip: 'Skip',
-    continue: 'Continue',
-    repoTitle: 'Have You Ever Had A Repo?',
-    residenceTimeTitle: 'Your Time At Current Residence?',
-    over1Year: 'Over 1 Year',
-    under1Year: 'Under 1 Year',
-    zipTitle: 'Your Zip Code For Current Residence?',
-    zipPlaceholder: 'Enter your zip code',
-    approvalTitle: "What's the difference between approval and pre-approval?",
-    approvalText:
-      'One word: verification. Pre-approvals are an estimate, not a promise. A pre-approval is a non-binding statement saying, based on a cursory review of your unverified financial status, that you are eligible for a loan up to a certain amount. It is based on a credit check and (again unverified) claims of income and debt. The approval is a the process of obtaining a specific loan on a specific car for a specific amount. These are subject to review of a complete loan application.',
-    exit: 'Exit',
-    contactTitle: 'Provide Your Contact Information',
-    firstNamePlaceholder: 'First Name',
-    lastNamePlaceholder: 'Last Name',
-    emailPlaceholder: 'Email Address',
-    addressPlaceholder: 'Home Address',
-    cityPlaceholder: 'City',
-    statePlaceholder: 'State',
-    zipPlaceholderForm: 'Zip Code',
-    phonePlaceholder: 'Phone Number',
-    jobTitleLabel: "What's Your Job Title",
-    jobTitlePlaceholder: "What's your job title?",
-    preApprovalAnswersTitle: 'Your Pre-Approval Answers',
-    reviewTitle: 'Review & Continue',
-    seeMonthlyPayment: 'See Monthly Payment',
-    summaryDebt: 'Debt',
-    summaryIncome: 'Income',
-    selectMonths: 'Select months',
-    enterMonthlyIncome: 'Enter monthly income',
-    fullNameLabel: 'Full Name',
-    back: 'Back',
-  },
-  es: {
-    loanTypeTitle: 'Seleccione Tipo De Prestamo',
-    autoLoans: 'Prestamo De Auto',
-    autoRefinance: 'Refinanciamiento De Auto',
-    cosignerTitle: 'Estas Solicitando Con Un Cosignatario?',
-    byMyself: 'Por Mi Mismo',
-    withCosigner: 'Con Cosignatario',
-    cosignerRelativeTitle: 'Tu Cosignatario Es Un Familiar?',
-    relative: 'Familiar',
-    nonRelative: 'No Familiar',
-    sameAddressTitle: 'Tu Cosignatario Vive En La Misma Direccion?',
-    livesSameAddress: 'Vive En La Misma Direccion',
-    notSameAddress: 'No Vive En La Misma Direccion',
-    employmentTitle: 'Seleccione Tipo De Empleo',
-    fullTime: 'Tiempo Completo',
-    partTime: 'Medio Tiempo',
-    tempSeasonal: 'Temporal/Estacional',
-    selfEmployed: 'Autoempleado',
-    ssiRetired: 'SSI / Jubilado',
-    military: 'Militar',
-    disability: 'Discapacidad',
-    proofIncomeTitle: 'Seleccione Tipo De Comprobante De Ingresos',
-    paystub: 'Talones De Pago',
-    w2: 'W2',
-    taxes: 'Impuestos',
-    taxes2Years: 'Impuestos 2 Anos',
-    form1099: '1099',
-    proofBenefits: 'Prueba De Beneficios',
-    rewardLetter: 'Carta De Beneficios',
-    monthlyIncomeTitle: 'Seleccione Ingreso Mensual',
-    other: 'Otro',
-    notProvided: 'No provisto',
-    monthlyAmountLabel: 'Mensual',
-    timeAtJobTitle: 'Elija Tiempo En El Trabajo',
-    over2Years: 'Mas De 2 Anos',
-    oneToTwoYears: '1-2 Anos',
-    lessThanYear: 'Menos De Un Ano',
-    monthsLabel: 'Meses',
-    driversLicenseTitle: 'Tiene Una Licencia De Conducir Vigente?',
-    yes: 'Si',
-    no: 'No',
-    downPaymentTitle: 'Seleccione Monto Del Pago Inicial',
-    downPaymentLabel: 'Pago Inicial',
-    enterDownPayment: 'Ingrese el pago inicial',
-    ssnItinTitle: 'Tiene Un Numero De Seguro Social O Un Numero ITIN?',
-    socialSecurity: 'Seguro Social',
-    itin: 'ITIN',
-    dtiTitle: 'Calculemos Su Relacion Deuda/Ingreso',
-    dtiDescription:
-      'Su relacion deuda/ingreso (DTI) es el total de sus pagos mensuales de deuda dividido entre su ingreso mensual bruto. La deuda mensual recurrente puede incluir pagos de auto, tarjetas de credito, hipoteca, prestamos personales, prestamos estudiantiles, etc.',
-    dtiCalculatorTitle: 'Calculadora De Relacion Deuda/Ingreso',
-    recurringDebtLabel: 'Su Deuda Mensual Recurrente:',
-    grossIncomeLabel: 'Su Ingreso Mensual Bruto:',
-    skip: 'Omitir',
-    continue: 'Continuar',
-    repoTitle: 'Alguna Vez Tuvo Un Repo?',
-    residenceTimeTitle: 'Tiempo En Su Residencia Actual?',
-    over1Year: 'Mas De 1 Ano',
-    under1Year: 'Menos De 1 Ano',
-    zipTitle: 'Su Codigo Postal De Residencia Actual?',
-    zipPlaceholder: 'Ingrese su codigo postal',
-    approvalTitle: 'Cual Es La Diferencia Entre Aprobacion Y Preaprobacion?',
-    approvalText:
-      'Una palabra: verificacion. Las preaprobaciones son una estimacion, no una promesa. Una preaprobacion es una declaracion no vinculante que dice, basada en una revision superficial de su estado financiero no verificado, que usted es elegible para un prestamo hasta cierto monto. Se basa en una verificacion de credito y en afirmaciones (no verificadas) de ingresos y deudas. La aprobacion es el proceso de obtener un prestamo especifico para un auto especifico por un monto especifico. Estas estan sujetas a revision de una solicitud completa.',
-    exit: 'Salir',
-    contactTitle: 'Proporcione Su Informacion De Contacto',
-    firstNamePlaceholder: 'Nombre',
-    lastNamePlaceholder: 'Apellido',
-    emailPlaceholder: 'Correo Electronico',
-    addressPlaceholder: 'Direccion',
-    cityPlaceholder: 'Ciudad',
-    statePlaceholder: 'Estado',
-    zipPlaceholderForm: 'Codigo Postal',
-    phonePlaceholder: 'Numero De Telefono',
-    jobTitleLabel: 'Cual Es Su Puesto De Trabajo',
-    jobTitlePlaceholder: 'Cual es su puesto de trabajo?',
-    preApprovalAnswersTitle: 'Sus Respuestas De Preaprobacion',
-    reviewTitle: 'Revision Y Continuar',
-    seeMonthlyPayment: 'Ver Pago Mensual',
-    summaryDebt: 'Deuda',
-    summaryIncome: 'Ingreso',
-    selectMonths: 'Seleccione meses',
-    enterMonthlyIncome: 'Ingrese ingreso mensual',
-    fullNameLabel: 'Nombre Completo',
-    back: 'Atras',
-  },
-}
-
-const getSteps = (language, copy) => {
-  const img = (name) => `/images/${language === 'es' ? 'btn_esp' : 'btn_eng'}_${name}.png`
-
-  return [
-    {
-      id: 'loan-type',
-      title: copy.loanTypeTitle,
-      options: [
-        {
-          value: 'autoloan',
-          img: img('autoloan'),
-          alt: copy.autoLoans,
-          label: copy.autoLoans,
-        },
-        {
-          value: 'autorefinance',
-          img: img('autorefinance'),
-          alt: copy.autoRefinance,
-          label: copy.autoRefinance,
-        },
-      ],
-    },
-    {
-      id: 'cosigner',
-      title: copy.cosignerTitle,
-      question: copy.cosignerTitle,
-      options: [
-        {
-          value: 'by-myself',
-          img: img('bymyself'),
-          alt: copy.byMyself,
-          label: copy.byMyself,
-        },
-        {
-          value: 'with-cosigner',
-          img: img('withacosigner'),
-          alt: copy.withCosigner,
-          label: copy.withCosigner,
-        },
-      ],
-    },
-    {
-      id: 'cosigner-relative',
-      title: copy.cosignerRelativeTitle,
-      options: [
-        {
-          value: 'relative',
-          img: img('relative'),
-          alt: copy.relative,
-          label: copy.relative,
-        },
-        {
-          value: 'non-relative',
-          img: img('nonrelative'),
-          alt: copy.nonRelative,
-          label: copy.nonRelative,
-        },
-      ],
-    },
-    {
-      id: 'same-address',
-      title: copy.sameAddressTitle,
-      options: [
-        {
-          value: 'same-address',
-          img: img('livesameaddress'),
-          alt: copy.livesSameAddress,
-          label: copy.livesSameAddress,
-        },
-        {
-          value: 'different-address',
-          img: img('nolivesameaddress'),
-          alt: copy.notSameAddress,
-          label: copy.notSameAddress,
-        },
-      ],
-    },
-    {
-      id: 'employment',
-      title: copy.employmentTitle,
-      options: [
-        {
-          value: 'fulltime',
-          img: img('fulltime'),
-          alt: copy.fullTime,
-          label: copy.fullTime,
-        },
-        {
-          value: 'parttime',
-          img: img('parttime'),
-          alt: copy.partTime,
-          label: copy.partTime,
-        },
-        {
-          value: 'tempseasonal',
-          img: img('tempseasonal'),
-          alt: copy.tempSeasonal,
-          label: copy.tempSeasonal,
-        },
-        {
-          value: 'selfemployed',
-          img: img('selfemployed'),
-          alt: copy.selfEmployed,
-          label: copy.selfEmployed,
-        },
-        {
-          value: 'ssiretired',
-          img: img('ssiretired'),
-          alt: copy.ssiRetired,
-          label: copy.ssiRetired,
-        },
-        {
-          value: 'military',
-          img: img('military'),
-          alt: copy.military,
-          label: copy.military,
-        },
-        {
-          value: 'disability',
-          img: img('disability'),
-          alt: copy.disability,
-          label: copy.disability,
-        },
-      ],
-    },
-    {
-      id: 'proof-of-income',
-      title: copy.proofIncomeTitle,
-      options: [
-        {
-          value: 'paystub',
-          img: img('paystub'),
-          alt: copy.paystub,
-          label: copy.paystub,
-        },
-        {
-          value: 'w2',
-          img: img('w2'),
-          alt: copy.w2,
-          label: copy.w2,
-        },
-        {
-          value: 'taxes',
-          img: img('taxes'),
-          alt: copy.taxes,
-          label: copy.taxes,
-        },
-        {
-          value: 'taxes-2-years',
-          img: img('taxes2years'),
-          alt: copy.taxes2Years,
-          label: copy.taxes2Years,
-        },
-        {
-          value: '1099',
-          img: img('1099'),
-          alt: copy.form1099,
-          label: copy.form1099,
-        },
-        {
-          value: 'proof-of-benefits',
-          img: img('proofofbenefits'),
-          alt: copy.proofBenefits,
-          label: copy.proofBenefits,
-        },
-        {
-          value: 'reward-letter',
-          img: img('rewardletter'),
-          alt: copy.rewardLetter,
-          label: copy.rewardLetter,
-        },
-      ],
-    },
-    {
-      id: 'monthly-income',
-      title: copy.monthlyIncomeTitle,
-      options: [
-        {
-          value: '2000',
-          img: img('2000monthly'),
-          alt: `$2,000 ${copy.monthlyAmountLabel}`,
-          label: `$2,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '2500',
-          img: img('2500monthly'),
-          alt: `$2,500 ${copy.monthlyAmountLabel}`,
-          label: `$2,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '3000',
-          img: img('3000monthly'),
-          alt: `$3,000 ${copy.monthlyAmountLabel}`,
-          label: `$3,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '3500',
-          img: img('3500monthly'),
-          alt: `$3,500 ${copy.monthlyAmountLabel}`,
-          label: `$3,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '4000',
-          img: img('4000monthly'),
-          alt: `$4,000 ${copy.monthlyAmountLabel}`,
-          label: `$4,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '4500',
-          img: img('4500monthly'),
-          alt: `$4,500 ${copy.monthlyAmountLabel}`,
-          label: `$4,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '5000',
-          img: img('5000monthly'),
-          alt: `$5,000 ${copy.monthlyAmountLabel}`,
-          label: `$5,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: 'other',
-          img: img('othermonthly'),
-          alt: copy.other,
-          label: copy.other,
-        },
-      ],
-    },
-    {
-      id: 'time-at-job',
-      title: copy.timeAtJobTitle,
-      options: [
-        {
-          value: 'over2years',
-          img: img('over2years'),
-          alt: copy.over2Years,
-          label: copy.over2Years,
-        },
-        {
-          value: '1-2years',
-          img: img('12years'),
-          alt: copy.oneToTwoYears,
-          label: copy.oneToTwoYears,
-        },
-        {
-          value: 'lessthanayear',
-          img: img('lessthanayear'),
-          alt: copy.lessThanYear,
-          label: copy.lessThanYear,
-        },
-      ],
-    },
-    {
-      id: 'drivers-license',
-      title: copy.driversLicenseTitle,
-      question: copy.driversLicenseTitle,
-      options: [
-        {
-          value: 'yes',
-          img: img('yes'),
-          alt: copy.yes,
-          label: copy.yes,
-        },
-        {
-          value: 'no',
-          img: img('no'),
-          alt: copy.no,
-          label: copy.no,
-        },
-      ],
-    },
-    {
-      id: 'down-payment',
-      title: copy.downPaymentTitle,
-      options: [
-        {
-          value: '0down',
-          img: img('0down'),
-          alt: '$0',
-          label: '$0',
-        },
-        {
-          value: '1000-1500',
-          img: img('1000to1500down'),
-          alt: '$1,000-$1,500',
-          label: '$1,000-$1,500',
-        },
-        {
-          value: '2000-2500',
-          img: img('2000to2500down'),
-          alt: '$2,000-$2,500',
-          label: '$2,000-$2,500',
-        },
-        {
-          value: '3000-3500',
-          img: img('3000to3500down'),
-          alt: '$3,000-$3,500',
-          label: '$3,000-$3,500',
-        },
-        {
-          value: '4000-4500',
-          img: img('4000to4500down'),
-          alt: '$4,000-$4,500',
-          label: '$4,000-$4,500',
-        },
-        {
-          value: '5000-6500',
-          img: img('5000to6500down'),
-          alt: '$5,000-$6,500',
-          label: '$5,000-$6,500',
-        },
-        {
-          value: 'other',
-          img: img('otheramountdown'),
-          alt: copy.other,
-          label: copy.other,
-        },
-      ],
-    },
-    {
-      id: 'ssn-itin',
-      title: copy.ssnItinTitle,
-      question: copy.ssnItinTitle,
-      options: [
-        {
-          value: 'social-security',
-          img: img('socialsecurity'),
-          alt: copy.socialSecurity,
-          label: copy.socialSecurity,
-        },
-        {
-          value: 'itin',
-          img: img('itin'),
-          alt: copy.itin,
-          label: copy.itin,
-        },
-      ],
-    },
-    {
-      id: 'dti',
-      title: copy.dtiTitle,
-      options: [],
-    },
-    {
-      id: 'repo-history',
-      title: copy.repoTitle,
-      question: copy.repoTitle,
-      options: [
-        {
-          value: 'repo-yes',
-          img: img('repoyes'),
-          alt: copy.yes,
-          label: copy.yes,
-        },
-        {
-          value: 'repo-no',
-          img: img('repono'),
-          alt: copy.no,
-          label: copy.no,
-        },
-      ],
-    },
-    {
-      id: 'residence-time',
-      title: copy.residenceTimeTitle,
-      question: copy.residenceTimeTitle,
-      options: [
-        {
-          value: 'over2years',
-          img: img('over2years'),
-          alt: copy.over2Years,
-          label: copy.over2Years,
-        },
-        {
-          value: 'over1year',
-          img: img('over1year'),
-          alt: copy.over1Year,
-          label: copy.over1Year,
-        },
-        {
-          value: 'under1year',
-          img: img('under1year'),
-          alt: copy.under1Year,
-          label: copy.under1Year,
-        },
-      ],
-    },
-    {
-      id: 'zip-code',
-      title: copy.zipTitle,
-      question: copy.zipTitle,
-      options: [],
-    },
-    {
-      id: 'approval-info',
-      title: copy.approvalTitle,
-      options: [
-        {
-          value: 'continue',
-          img: img('continue'),
-          alt: copy.continue,
-          label: copy.continue,
-        },
-        {
-          value: 'exit',
-          img: img('exit'),
-          alt: copy.exit,
-          label: copy.exit,
-        },
-      ],
-    },
-    {
-      id: 'contact-info',
-      title: copy.contactTitle,
-      options: [],
-    },
-    {
-      id: 'review',
-      title: copy.reviewTitle,
-      options: [
-        {
-          value: 'see-payment',
-          img: img('seemonthlypayment'),
-          alt: copy.seeMonthlyPayment,
-          label: copy.seeMonthlyPayment,
-        },
-      ],
-    },
-  ]
-}
+import { copyByLanguage, getSteps } from './loans/loanSteps'
+import { buildPreApprovalPayload, sendPayload } from './loans/payloads'
+import StepOptions from './loans/StepOptions'
 
 export default function Loans() {
   const { language } = useLanguage()
@@ -619,6 +17,10 @@ export default function Loans() {
   const [monthlyDebt, setMonthlyDebt] = useState('')
   const [grossMonthlyIncome, setGrossMonthlyIncome] = useState('')
   const [zipCode, setZipCode] = useState('')
+  const [zipValidationError, setZipValidationError] = useState('')
+  const [emailValidationError, setEmailValidationError] = useState('')
+  const [phoneValidationError, setPhoneValidationError] = useState('')
+  const [contactInfoErrors, setContactInfoErrors] = useState([])
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
     lastName: '',
@@ -629,6 +31,8 @@ export default function Loans() {
     zip: '',
     phone: '',
   })
+  const [hasSentPreApproval, setHasSentPreApproval] = useState(false)
+  const [findBankResponse, setFindBankResponse] = useState(null)
   const [brokenImages, setBrokenImages] = useState({})
 
   const step = steps[stepIndex]
@@ -683,11 +87,11 @@ export default function Loans() {
       if (zipCode) {
         items.push({ label: copy.zipTitle, value: zipCode })
       }
-      if (contactInfo.firstName || contactInfo.lastName) {
-        items.push({
-          label: copy.fullNameLabel,
-          value: `${contactInfo.firstName} ${contactInfo.lastName}`.trim(),
-        })
+      if (contactInfo.firstName) {
+        items.push({ label: copy.firstNamePlaceholder, value: contactInfo.firstName })
+      }
+      if (contactInfo.lastName) {
+        items.push({ label: copy.lastNamePlaceholder, value: contactInfo.lastName })
       }
       if (contactInfo.email) {
         items.push({ label: copy.emailPlaceholder, value: contactInfo.email })
@@ -730,6 +134,7 @@ export default function Loans() {
   const handleSelect = (value) => {
     setAnswers((prev) => ({ ...prev, [step.id]: value }))
 
+    // These steps require additional input before advancing.
     if (step.id === 'cosigner' && value === 'by-myself') {
       setStepIndex(steps.findIndex((item) => item.id === 'employment'))
       return
@@ -745,6 +150,11 @@ export default function Loans() {
 
     if (step.id === 'down-payment' && value === 'other') {
       return
+    }
+
+    if (step.id === 'review') {
+      console.log('Find Bank button clicked')
+      sendFindBankPayload()
     }
 
     if (!isLastStep) {
@@ -779,33 +189,154 @@ export default function Loans() {
     setStepIndex((prev) => prev + 1)
   }
 
-  const handleZipCodeContinue = () => {
-    if (!zipCode.trim() || isLastStep) return
-    setContactInfo((prev) => ({ ...prev, zip: zipCode.trim() }))
+  const handleZipCodeContinue = async () => {
+    const trimmedZip = zipCode.trim()
+    if (!trimmedZip || isLastStep) return
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/validate-zipcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ zipcode: trimmedZip }),
+      })
+      const data = await response.json()
+      if (!data?.valid) {
+        const message = 'Please enter a valid zip code.'
+        setZipValidationError(message)
+        window.alert(message)
+        return
+      }
+      if (data?.city) {
+        setContactInfo((prev) => ({ ...prev, city: data.city }))
+      }
+    } catch (error) {
+      const message = 'Unable to validate zip code. Please try again.'
+      setZipValidationError(message)
+      window.alert(message)
+      return
+    }
+
+    setZipValidationError('')
+    setContactInfo((prev) => ({ ...prev, zip: trimmedZip }))
     setStepIndex((prev) => prev + 1)
   }
 
   const handleContactInfoChange = (field) => (event) => {
     const value = event.target.value
     setContactInfo((prev) => ({ ...prev, [field]: value }))
+    if (field === 'email') {
+      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(value.trim())) {
+        setEmailValidationError('please add valid email')
+      } else {
+        setEmailValidationError('')
+      }
+    }
+    if (field === 'phone') {
+      const digits = value.replace(/\D/gu, '')
+      if (!value || digits.length === 10) {
+        setPhoneValidationError('')
+      }
+    }
     if (field === 'zip') {
       setZipCode(value)
     }
   }
 
   const handleContactInfoContinue = () => {
+    const emailValue = contactInfo.email.trim()
+    const phoneValue = contactInfo.phone.trim()
+    const phoneDigits = phoneValue.replace(/\D/gu, '')
+    const errors = []
+    if (emailValue && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(emailValue)) {
+      const message = 'please add valid email'
+      setEmailValidationError(message)
+      errors.push(message)
+    }
+    if (phoneValue && phoneDigits.length !== 10) {
+      const message = 'please add valid phone number'
+      setPhoneValidationError(message)
+      errors.push(message)
+    }
+
     const requiredFields = [
-      contactInfo.firstName,
-      contactInfo.lastName,
-      contactInfo.email,
-      contactInfo.address,
-      contactInfo.city,
-      contactInfo.state,
-      contactInfo.zip,
-      contactInfo.phone,
+      { key: 'firstName', label: 'First Name', value: contactInfo.firstName },
+      { key: 'lastName', label: 'Last Name', value: contactInfo.lastName },
+      { key: 'email', label: 'Email Address', value: emailValue },
+      { key: 'address', label: 'Home Address', value: contactInfo.address },
+      { key: 'city', label: 'City', value: contactInfo.city },
+      { key: 'state', label: 'State', value: contactInfo.state },
+      { key: 'zip', label: 'Zip Code', value: contactInfo.zip },
+      { key: 'phone', label: 'Phone Number', value: phoneValue },
     ]
-    if (requiredFields.some((field) => !field.trim()) || isLastStep) return
+    const missing = requiredFields.filter((field) => !field.value.trim())
+    if (missing.length) {
+      errors.push(`Please fill in: ${missing.map((field) => field.label).join(', ')}.`)
+    }
+    if (errors.length || isLastStep) {
+      setContactInfoErrors(errors)
+      return
+    }
+    setContactInfoErrors([])
+    // Send the pre-approval payload once the contact info is complete.
+    sendPreApprovalPayload()
     setStepIndex((prev) => prev + 1)
+  }
+
+  const sendPreApprovalPayload = async () => {
+    if (hasSentPreApproval) return
+    await sendPayload(
+      'http://127.0.0.1:8000/echo',
+      buildPreApprovalPayload({
+        language,
+        answers,
+        otherMonthlyIncome,
+        otherDownPayment,
+        jobTitle,
+        timeAtJobMonths,
+        monthlyDebt,
+        grossMonthlyIncome,
+        zipCode,
+        contactInfo,
+        summary,
+      }),
+      () => setHasSentPreApproval(true)
+    )
+  }
+
+  const sendFindBankPayload = async () => {
+    console.log('Sending find bank payload')
+    setFindBankResponse(null)
+    try {
+      const response = await fetch('http://127.0.0.1:8000/findback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+        body: JSON.stringify(
+          buildPreApprovalPayload({
+            language,
+            answers,
+            otherMonthlyIncome,
+            otherDownPayment,
+            jobTitle,
+            timeAtJobMonths,
+            monthlyDebt,
+            grossMonthlyIncome,
+            zipCode,
+            contactInfo,
+            summary,
+          })
+        ),
+      })
+      const data = await response.json()
+      setFindBankResponse({ receivedAt: new Date().toISOString(), data })
+    } catch (error) {
+      console.error('Failed to send find bank payload', error)
+      setFindBankResponse({ error: 'Failed to fetch response.' })
+    }
   }
 
   const handleBack = () => {
@@ -833,51 +364,29 @@ export default function Loans() {
                       </p>
                     </div>
                   )}
-                  {step.options.map((option) => {
-                    const isSelected = answers[step.id] === option.value
-                    const selectedStyle = isSelected
-                      ? { outline: '4px solid #39b54a', borderRadius: '10px' }
-                      : undefined
-
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        className="btn p-0 border-0 bg-transparent"
-                        onClick={() => handleSelect(option.value)}
-                        aria-pressed={isSelected}
+                  <StepOptions
+                    options={step.options}
+                    selectedValue={answers[step.id]}
+                    onSelect={handleSelect}
+                    brokenImages={brokenImages}
+                    setBrokenImages={setBrokenImages}
+                  />
+                  {step.id === 'review' && findBankResponse && (
+                    <div style={{ marginTop: '16px', textAlign: 'left' }}>
+                      <pre
+                        style={{
+                          background: '#f7f7f7',
+                          padding: '12px',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          whiteSpace: 'pre-wrap',
+                          wordBreak: 'break-word',
+                        }}
                       >
-                        {brokenImages[option.img] ? (
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              padding: '18px 28px',
-                              margin: '6px',
-                              border: '4px solid #39b54a',
-                              borderRadius: '10px',
-                              fontWeight: 'bold',
-                              textTransform: 'uppercase',
-                              background: '#fff',
-                              color: '#000',
-                              ...(selectedStyle || {}),
-                            }}
-                          >
-                            {option.label}
-                          </span>
-                        ) : (
-                          <img
-                            src={option.img}
-                            alt={option.alt}
-                            className="imgbutton"
-                            style={selectedStyle}
-                            onError={() =>
-                              setBrokenImages((prev) => ({ ...prev, [option.img]: true }))
-                            }
-                          />
-                        )}
-                      </button>
-                    )
-                  })}
+                        {JSON.stringify(findBankResponse, null, 2)}
+                      </pre>
+                    </div>
+                  )}
                   {step.id === 'monthly-income' && answers[step.id] === 'other' && (
                     <div style={{ marginTop: '16px' }}>
                       <input
@@ -1043,6 +552,25 @@ export default function Loans() {
                   {step.id === 'contact-info' && (
                     <div style={{ marginTop: '16px', textAlign: 'left' }}>
                       <div style={{ maxWidth: '560px', margin: '0 auto' }}>
+                        {contactInfoErrors.length > 0 && (
+                          <div
+                            style={{
+                              background: '#fbe9e7',
+                              border: '1px solid #f5c6cb',
+                              color: '#b71c1c',
+                              padding: '12px',
+                              borderRadius: '8px',
+                              marginBottom: '12px',
+                            }}
+                          >
+                            <strong>Fix the following:</strong>
+                            <ul style={{ margin: '8px 0 0', paddingLeft: '18px' }}>
+                              {contactInfoErrors.map((error) => (
+                                <li key={error}>{error}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                         <input
                           type="text"
                           className="form-control"
@@ -1067,6 +595,11 @@ export default function Loans() {
                           onChange={handleContactInfoChange('email')}
                           style={{ marginBottom: '12px' }}
                         />
+                        {emailValidationError && (
+                          <div style={{ color: '#d9534f', marginBottom: '12px' }}>
+                            {emailValidationError}
+                          </div>
+                        )}
                         <input
                           type="text"
                           className="form-control"
@@ -1107,21 +640,16 @@ export default function Loans() {
                           onChange={handleContactInfoChange('phone')}
                           style={{ marginBottom: '12px' }}
                         />
+                        {phoneValidationError && (
+                          <div style={{ color: '#d9534f', marginBottom: '12px' }}>
+                            {phoneValidationError}
+                          </div>
+                        )}
                         <div style={{ textAlign: 'center' }}>
                           <button
                             type="button"
                             className="btn btn-success"
                             onClick={handleContactInfoContinue}
-                            disabled={[
-                              contactInfo.firstName,
-                              contactInfo.lastName,
-                              contactInfo.email,
-                              contactInfo.address,
-                              contactInfo.city,
-                              contactInfo.state,
-                              contactInfo.zip || zipCode,
-                              contactInfo.phone,
-                            ].some((field) => !String(field).trim())}
                           >
                             {copy.continue}
                           </button>

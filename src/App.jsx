@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Loans from './pages/Loans'
 import LoanCalculator from './pages/LoanCalculator'
+import RateSheetUploader from './pages/RateSheetUploader'
 import Terms from './pages/Terms'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/loans" element={<Loans />} />
         <Route path="/loancalculator" element={<LoanCalculator />} />
+        <Route path="/ratesheetuploader" element={<RateSheetUploader />} />
         <Route path="/terms" element={<Terms />} />
       </Routes>
       <Footer />
