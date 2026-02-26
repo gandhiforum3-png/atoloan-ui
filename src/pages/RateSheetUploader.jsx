@@ -435,6 +435,13 @@ export default function RateSheetUploader() {
   const [confirmedSections, setConfirmedSections] = useState([])
   const [showRawJSON, setShowRawJSON] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState({ type: '', message: '' })
+  const [viewMode, setViewMode] = useState('upload') // 'upload' or 'view-existing'
+  const [banksList, setBanksList] = useState([])
+  const [selectedBankId, setSelectedBankId] = useState('')
+  const [isLoadingBanks, setIsLoadingBanks] = useState(false)
+  const [isLoadingRateSheet, setIsLoadingRateSheet] = useState(false)
 
   useEffect(() => {
     if (!responseResult || typeof responseResult !== 'object') {
@@ -443,6 +450,33 @@ export default function RateSheetUploader() {
     }
     setEditableResult(responseResult)
   }, [responseResult])
+
+  // Fetch banks list when switching to "view existing" mode
+  useEffect(() => {
+    if (viewMode === 'view-existing' && banksList.length === 0) {
+      const fetchBanks = async () => {
+        setIsLoadingBanks(true)
+        try {
+          const response = await fetch('http://127.0.0.1:8000/credit-unions')
+          if (!response.ok) {
+            throw new Error('Failed to fetch banks list')
+          }
+          const data = await response.json()
+          // Extract credit_unions array from response
+          const creditUnions = data.credit_unions || []
+          setBanksList(Array.isArray(creditUnions) ? creditUnions : [])
+          console.log(`✅ Loaded ${creditUnions.length} credit unions`)
+        } catch (error) {
+          console.error('Failed to fetch banks:', error)
+          setBanksList([])
+          setStatus({ type: 'error', message: 'Failed to load banks list' })
+        } finally {
+          setIsLoadingBanks(false)
+        }
+      }
+      fetchBanks()
+    }
+  }, [viewMode, banksList.length])
 
   const currentSectionKey = reviewOrder[reviewIndex]
   const hasSection =
@@ -463,6 +497,113 @@ export default function RateSheetUploader() {
     setStatus({ type: '', message: '' })
   }
 
+  const handleBankSelection = async (bankId) => {
+    if (!bankId) {
+      setSelectedBankId('')
+      setResponseResult(null)
+      return
+    }
+
+    setSelectedBankId(bankId)
+    setIsLoadingRateSheet(true)
+    setStatus({ type: '', message: '' })
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/credit-unions/${bankId}/ratesheet`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch rate sheet')
+      }
+
+      const rateSheet = await response.json()
+      const finalData = { ...reviewSkeleton, ...rateSheet }
+      setResponseResult(finalData)
+      setReviewIndex(0)
+      setConfirmedSections([])
+      setSaveStatus({ type: '', message: '' })
+      setStatus({ type: 'success', message: 'Rate sheet loaded successfully' })
+    } catch (error) {
+      console.error('Failed to fetch rate sheet:', error)
+      setStatus({ type: 'error', message: 'Failed to load rate sheet' })
+      setResponseResult(null)
+    } finally {
+      setIsLoadingRateSheet(false)
+    }
+  }
+
+  const handleDeleteCurrentRateSheet = async () => {
+    if (!selectedBankId) {
+      return
+    }
+
+    if (!window.confirm('Are you sure you want to delete this rate sheet?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/credit-unions/${selectedBankId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete rate sheet')
+      }
+
+      // Clear the editor and refresh banks list
+      setResponseResult(null)
+      setSelectedBankId('')
+      setBanksList(prev => prev.filter(bank => bank.id !== selectedBankId))
+      setStatus({ type: 'success', message: 'Rate sheet deleted successfully' })
+    } catch (error) {
+      console.error('Failed to delete rate sheet:', error)
+      setStatus({ type: 'error', message: 'Failed to delete rate sheet' })
+    }
+  }
+
+  const handleSaveToDatabase = async () => {
+    setIsSaving(true)
+    setSaveStatus({ type: '', message: '' })
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editableResult),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save to database')
+      }
+
+      const result = await response.json()
+      console.log('✅ Saved to database:', result)
+
+      setSaveStatus({
+        type: 'success',
+        message: 'Successfully saved to database!'
+      })
+
+      // Refresh the banks list if in view mode
+      if (viewMode === 'view-existing') {
+        const listResponse = await fetch('http://127.0.0.1:8000/credit-unions')
+        if (listResponse.ok) {
+          const data = await listResponse.json()
+          const creditUnions = data.credit_unions || []
+          setBanksList(Array.isArray(creditUnions) ? creditUnions : [])
+        }
+      }
+    } catch (error) {
+      console.error('❌ Failed to save to database:', error)
+      setSaveStatus({
+        type: 'error',
+        message: 'Failed to save to database. Please try again.'
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (!file) {
@@ -480,6 +621,7 @@ export default function RateSheetUploader() {
     setReviewIndex(0)
     setConfirmedSections([])
     setRawResponse('')
+    setSaveStatus({ type: '', message: '' })
     try {
       const response = await fetch('http://127.0.0.1:8000/ratesheetuploader', {
         method: 'POST',
@@ -541,7 +683,120 @@ export default function RateSheetUploader() {
       <div className="container" style={{ paddingTop: '120px', paddingBottom: '60px' }}>
         <h1 style={{ textAlign: 'center', marginBottom: '12px' }}>{copy.title}</h1>
         <p style={{ textAlign: 'center', marginBottom: '24px' }}>{copy.description}</p>
+
+        {/* Mode Toggle */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto 24px' }}>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setViewMode('upload')
+                setResponseResult(null)
+                setSelectedBankId('')
+              }}
+              style={{
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: viewMode === 'upload' ? '2px solid #4caf50' : '2px solid #ddd',
+                borderRadius: '8px',
+                background: viewMode === 'upload' ? '#4caf50' : '#fff',
+                color: viewMode === 'upload' ? '#fff' : '#666',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              📤 Upload Ratesheet
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('view-existing')}
+              style={{
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: viewMode === 'view-existing' ? '2px solid #2196f3' : '2px solid #ddd',
+                borderRadius: '8px',
+                background: viewMode === 'view-existing' ? '#2196f3' : '#fff',
+                color: viewMode === 'view-existing' ? '#fff' : '#666',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              👁️ View Existing Rate Sheet
+            </button>
+          </div>
+        </div>
+
+        {/* View Existing - Bank Dropdown */}
+        {viewMode === 'view-existing' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto 24px' }}>
+            <div style={{
+              background: '#f5f5f5',
+              padding: '20px',
+              borderRadius: '8px',
+              border: '1px solid #ddd'
+            }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', fontSize: '14px' }}>
+                Select Credit Union / Bank:
+              </label>
+              {isLoadingBanks ? (
+                <div style={{ padding: '12px', textAlign: 'center', color: '#666' }}>
+                  Loading banks...
+                </div>
+              ) : (
+                <select
+                  value={selectedBankId}
+                  onChange={(e) => handleBankSelection(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '14px',
+                    borderRadius: '6px',
+                    border: '1px solid #ccc',
+                    background: '#fff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">-- Select a Bank / Credit Union --</option>
+                  {banksList.map((bank) => (
+                    <option key={bank.id} value={bank.id}>
+                      {bank.name || bank.credit_union_info?.name || `Bank ID: ${bank.id}`}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {isLoadingRateSheet && (
+                <div style={{ marginTop: '12px', padding: '12px', textAlign: 'center', color: '#2196f3' }}>
+                  Loading rate sheet...
+                </div>
+              )}
+              {selectedBankId && responseResult && (
+                <div style={{ marginTop: '16px' }}>
+                  <button
+                    type="button"
+                    onClick={handleDeleteCurrentRateSheet}
+                    style={{
+                      padding: '10px 20px',
+                      fontSize: '14px',
+                      border: '1px solid #f44336',
+                      borderRadius: '6px',
+                      background: '#fff',
+                      color: '#f44336',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    🗑️ Delete This Rate Sheet
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <form
+          id="rate-sheet-editor"
           onSubmit={handleSubmit}
           style={{
             maxWidth: responseResult ? '1200px' : '560px',
@@ -549,16 +804,42 @@ export default function RateSheetUploader() {
             transition: 'max-width 0.3s ease'
           }}
         >
-          <div style={{ marginBottom: '16px' }}>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={handleFileChange}
-              className="form-control"
-              aria-label={copy.selectFile}
-            />
-          </div>
-          {status.message && (
+          {/* Only show upload controls in upload mode */}
+          {viewMode === 'upload' && (
+            <>
+              <div style={{ marginBottom: '16px' }}>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleFileChange}
+                  className="form-control"
+                  aria-label={copy.selectFile}
+                />
+              </div>
+              {status.message && (
+                <div
+                  style={{
+                    marginBottom: '16px',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    color: status.type === 'error' ? '#b71c1c' : '#2e7d32',
+                    background: status.type === 'error' ? '#fbe9e7' : '#e8f5e9',
+                    border: `1px solid ${status.type === 'error' ? '#f5c6cb' : '#c8e6c9'}`,
+                  }}
+                >
+                  {status.message}
+                </div>
+              )}
+              <div style={{ textAlign: 'center' }}>
+                <button type="submit" className="btn btn-success" disabled={isUploading}>
+                  {isUploading ? '...' : copy.submit}
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Show status message in view-existing mode */}
+          {viewMode === 'view-existing' && status.message && (
             <div
               style={{
                 marginBottom: '16px',
@@ -567,16 +848,13 @@ export default function RateSheetUploader() {
                 color: status.type === 'error' ? '#b71c1c' : '#2e7d32',
                 background: status.type === 'error' ? '#fbe9e7' : '#e8f5e9',
                 border: `1px solid ${status.type === 'error' ? '#f5c6cb' : '#c8e6c9'}`,
+                maxWidth: '1200px',
+                margin: '0 auto 16px'
               }}
             >
               {status.message}
             </div>
           )}
-          <div style={{ textAlign: 'center' }}>
-            <button type="submit" className="btn btn-success" disabled={isUploading}>
-              {isUploading ? '...' : copy.submit}
-            </button>
-          </div>
           {/* DEBUG INFO */}
           {(responseResult || responseBody || rawResponse) && (
             <div style={{
@@ -730,24 +1008,35 @@ export default function RateSheetUploader() {
                   {isLastSection ? 'Confirm' : 'Confirm & Next'}
                 </button>
                 {confirmedSections.length === reviewOrder.length && (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => {
-                      const jsonStr = JSON.stringify(editableResult, null, 2)
-                      const blob = new Blob([jsonStr], { type: 'application/json' })
-                      const url = URL.createObjectURL(blob)
-                      const a = document.createElement('a')
-                      a.href = url
-                      a.download = `ratesheet-${new Date().toISOString().split('T')[0]}.json`
-                      document.body.appendChild(a)
-                      a.click()
-                      document.body.removeChild(a)
-                      URL.revokeObjectURL(url)
-                    }}
-                  >
-                    Download JSON
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleSaveToDatabase}
+                      disabled={isSaving}
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {isSaving ? 'Saving...' : '💾 Save to Database'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary"
+                      onClick={() => {
+                        const jsonStr = JSON.stringify(editableResult, null, 2)
+                        const blob = new Blob([jsonStr], { type: 'application/json' })
+                        const url = URL.createObjectURL(blob)
+                        const a = document.createElement('a')
+                        a.href = url
+                        a.download = `ratesheet-${new Date().toISOString().split('T')[0]}.json`
+                        document.body.appendChild(a)
+                        a.click()
+                        document.body.removeChild(a)
+                        URL.revokeObjectURL(url)
+                      }}
+                    >
+                      Download JSON
+                    </button>
+                  </>
                 )}
                 <button
                   type="button"
@@ -763,21 +1052,40 @@ export default function RateSheetUploader() {
                 </button>
               </div>
               {confirmedSections.length === reviewOrder.length && (
-                <div
-                  style={{
-                    marginTop: '16px',
-                    padding: '12px',
-                    background: '#e8f5e9',
-                    border: '1px solid #4caf50',
-                    borderRadius: '6px',
-                    color: '#2e7d32',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                  }}
-                >
-                  ✓ All sections confirmed! You can now download or copy the final JSON.
-                </div>
+                <>
+                  <div
+                    style={{
+                      marginTop: '16px',
+                      padding: '12px',
+                      background: '#e8f5e9',
+                      border: '1px solid #4caf50',
+                      borderRadius: '6px',
+                      color: '#2e7d32',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}
+                  >
+                    ✓ All sections confirmed! You can now save to database, download, or copy the final JSON.
+                  </div>
+                  {saveStatus.message && (
+                    <div
+                      style={{
+                        marginTop: '12px',
+                        padding: '12px',
+                        borderRadius: '6px',
+                        color: saveStatus.type === 'error' ? '#b71c1c' : '#1b5e20',
+                        background: saveStatus.type === 'error' ? '#ffebee' : '#e8f5e9',
+                        border: `2px solid ${saveStatus.type === 'error' ? '#f44336' : '#4caf50'}`,
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {saveStatus.type === 'success' ? '✅' : '❌'} {saveStatus.message}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
