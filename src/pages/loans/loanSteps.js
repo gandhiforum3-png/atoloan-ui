@@ -84,6 +84,15 @@ export const copyByLanguage = {
     enterMonthlyIncome: 'Enter monthly income',
     fullNameLabel: 'Full Name',
     back: 'Back',
+    uploadDocumentsTitle: 'Upload Required Documents',
+    uploadDocumentsDescription: 'Please upload a photo of your driver\'s license and your most recent paycheck to complete your application.',
+    driversLicenseLabel: 'Driver\'s License Photo',
+    paycheckLabel: 'Paycheck / Pay Stub',
+    submitDocuments: 'Submit Documents',
+    uploadSuccess: 'Documents uploaded successfully!',
+    uploadError: 'Failed to upload documents. Please try again.',
+    selectFile: 'Select File',
+    noFileSelected: 'No file selected',
   },
   es: {
     loanTypeTitle: 'Seleccione Tipo De Prestamo',
@@ -170,6 +179,15 @@ export const copyByLanguage = {
     enterMonthlyIncome: 'Ingrese ingreso mensual',
     fullNameLabel: 'Nombre Completo',
     back: 'Atras',
+    uploadDocumentsTitle: 'Subir Documentos Requeridos',
+    uploadDocumentsDescription: 'Por favor suba una foto de su licencia de conducir y su talon de pago mas reciente para completar su solicitud.',
+    driversLicenseLabel: 'Foto de Licencia de Conducir',
+    paycheckLabel: 'Talon de Pago',
+    submitDocuments: 'Enviar Documentos',
+    uploadSuccess: 'Documentos subidos exitosamente!',
+    uploadError: 'Error al subir documentos. Por favor intente de nuevo.',
+    selectFile: 'Seleccionar Archivo',
+    noFileSelected: 'Ningun archivo seleccionado',
   },
 }
 
@@ -599,6 +617,11 @@ export const getSteps = (language, copy) => {
           label: copy.seeMonthlyPayment,
         },
       ],
+    },
+    {
+      id: 'upload-documents',
+      title: copy.uploadDocumentsTitle,
+      options: [],
     },
   ]
 }

@@ -34,6 +34,10 @@ export default function Loans() {
   const [hasSentPreApproval, setHasSentPreApproval] = useState(false)
   const [findBankResponse, setFindBankResponse] = useState(null)
   const [brokenImages, setBrokenImages] = useState({})
+  const [driversLicenseFile, setDriversLicenseFile] = useState(null)
+  const [paycheckFile, setPaycheckFile] = useState(null)
+  const [documentUploadStatus, setDocumentUploadStatus] = useState(null)
+  const [isUploadingDocuments, setIsUploadingDocuments] = useState(false)
 
   const step = steps[stepIndex]
   const isLastStep = stepIndex === steps.length - 1
@@ -155,6 +159,7 @@ export default function Loans() {
     if (step.id === 'review') {
       console.log('Find Bank button clicked')
       sendFindBankPayload()
+      return // Don't auto-advance; sendFindBankPayload will advance after API response
     }
 
     if (!isLastStep) {
@@ -333,9 +338,49 @@ export default function Loans() {
       })
       const data = await response.json()
       setFindBankResponse({ receivedAt: new Date().toISOString(), data })
+      // Always advance to document upload step after getting response
+      setStepIndex((prev) => prev + 1)
     } catch (error) {
       console.error('Failed to send find bank payload', error)
       setFindBankResponse({ error: 'Failed to fetch response.' })
+      // Still advance to upload step even on error
+      setStepIndex((prev) => prev + 1)
+    }
+  }
+
+  const handleDocumentUpload = async () => {
+    if (!driversLicenseFile || !paycheckFile) {
+      setDocumentUploadStatus({ error: 'Please select both files before submitting.' })
+      return
+    }
+
+    setIsUploadingDocuments(true)
+    setDocumentUploadStatus(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('drivers_license', driversLicenseFile)
+      formData.append('paycheck', paycheckFile)
+      formData.append('user_email', contactInfo.email)
+      formData.append('user_name', `${contactInfo.firstName}_${contactInfo.lastName}`)
+
+      const response = await fetch('http://127.0.0.1:8000/uploadDocuments', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        setDocumentUploadStatus({ success: true, data })
+      } else {
+        setDocumentUploadStatus({ error: data.detail || data.errors?.join(', ') || 'Upload failed' })
+      }
+    } catch (error) {
+      console.error('Document upload failed:', error)
+      setDocumentUploadStatus({ error: 'Failed to upload documents. Please try again.' })
+    } finally {
+      setIsUploadingDocuments(false)
     }
   }
 
@@ -652,6 +697,142 @@ export default function Loans() {
                             onClick={handleContactInfoContinue}
                           >
                             {copy.continue}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {step.id === 'upload-documents' && (
+                    <div style={{ marginTop: '16px', textAlign: 'center' }}>
+                      <p style={{ marginBottom: '20px', maxWidth: '720px', marginLeft: 'auto', marginRight: 'auto' }}>
+                        {copy.uploadDocumentsDescription}
+                      </p>
+                      
+                      {/* Show bank result if available */}
+                      {findBankResponse?.data?.best_bank ? (
+                        <div style={{
+                          background: '#e8f5e9',
+                          border: '1px solid #4caf50',
+                          borderRadius: '8px',
+                          padding: '16px',
+                          marginBottom: '24px',
+                          maxWidth: '500px',
+                          marginLeft: 'auto',
+                          marginRight: 'auto'
+                        }}>
+                          <h3 style={{ color: '#2e7d32', marginBottom: '12px' }}>🎉 Best Bank Offer Found!</h3>
+                          <p style={{ margin: '4px 0' }}><strong>Bank:</strong> {findBankResponse.data.best_bank.bank_name}</p>
+                          <p style={{ margin: '4px 0' }}><strong>Interest Rate:</strong> {findBankResponse.data.best_bank.interest_rate}</p>
+                          <p style={{ margin: '4px 0' }}><strong>Program:</strong> {findBankResponse.data.best_bank.program_name}</p>
+                          <p style={{ margin: '4px 0' }}><strong>Term:</strong> {findBankResponse.data.best_bank.term_in_months} months</p>
+                        </div>
+                      ) : findBankResponse?.error ? (
+                        <div style={{
+                          background: '#fff3e0',
+                          border: '1px solid #ff9800',
+                          borderRadius: '8px',
+                          padding: '16px',
+                          marginBottom: '24px',
+                          maxWidth: '500px',
+                          marginLeft: 'auto',
+                          marginRight: 'auto'
+                        }}>
+                          <h3 style={{ color: '#e65100', marginBottom: '12px' }}>⚠️ Credit Check Issue</h3>
+                          <p>Please upload your documents below and we will review your application manually.</p>
+                        </div>
+                      ) : findBankResponse?.data ? (
+                        <div style={{
+                          background: '#e3f2fd',
+                          border: '1px solid #2196f3',
+                          borderRadius: '8px',
+                          padding: '16px',
+                          marginBottom: '24px',
+                          maxWidth: '500px',
+                          marginLeft: 'auto',
+                          marginRight: 'auto'
+                        }}>
+                          <h3 style={{ color: '#1565c0', marginBottom: '12px' }}>📋 Application Received</h3>
+                          <p>Please upload your documents below to complete your application.</p>
+                        </div>
+                      ) : null}
+
+                      <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'left' }}>
+                        {/* Driver's License Upload */}
+                        <div style={{ marginBottom: '20px' }}>
+                          <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+                            📄 {copy.driversLicenseLabel}
+                          </label>
+                          <input
+                            type="file"
+                            accept="image/*,.pdf"
+                            onChange={(e) => setDriversLicenseFile(e.target.files[0])}
+                            style={{ marginBottom: '4px' }}
+                          />
+                          {driversLicenseFile && (
+                            <div style={{ color: '#4caf50', fontSize: '14px' }}>
+                              ✓ {driversLicenseFile.name}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Paycheck Upload */}
+                        <div style={{ marginBottom: '20px' }}>
+                          <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+                            💰 {copy.paycheckLabel}
+                          </label>
+                          <input
+                            type="file"
+                            accept="image/*,.pdf"
+                            onChange={(e) => setPaycheckFile(e.target.files[0])}
+                            style={{ marginBottom: '4px' }}
+                          />
+                          {paycheckFile && (
+                            <div style={{ color: '#4caf50', fontSize: '14px' }}>
+                              ✓ {paycheckFile.name}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Status Messages */}
+                        {documentUploadStatus?.error && (
+                          <div style={{
+                            background: '#ffebee',
+                            border: '1px solid #f44336',
+                            color: '#c62828',
+                            padding: '12px',
+                            borderRadius: '8px',
+                            marginBottom: '16px'
+                          }}>
+                            ❌ {documentUploadStatus.error}
+                          </div>
+                        )}
+
+                        {documentUploadStatus?.success && (
+                          <div style={{
+                            background: '#e8f5e9',
+                            border: '1px solid #4caf50',
+                            color: '#2e7d32',
+                            padding: '12px',
+                            borderRadius: '8px',
+                            marginBottom: '16px'
+                          }}>
+                            ✅ {copy.uploadSuccess}
+                            <p style={{ margin: '8px 0 0', fontSize: '14px' }}>
+                              Submission ID: {documentUploadStatus.data.submission_id}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Submit Button */}
+                        <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                          <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={handleDocumentUpload}
+                            disabled={!driversLicenseFile || !paycheckFile || isUploadingDocuments || documentUploadStatus?.success}
+                            style={{ padding: '12px 32px', fontSize: '16px' }}
+                          >
+                            {isUploadingDocuments ? 'Uploading...' : copy.submitDocuments}
                           </button>
                         </div>
                       </div>
