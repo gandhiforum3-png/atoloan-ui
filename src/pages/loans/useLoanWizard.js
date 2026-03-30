@@ -137,7 +137,7 @@ export default function useLoanWizard() {
   const sendPreApprovalPayload = async () => {
     if (hasSentPreApproval) return
     await sendPayload(
-      'http://127.0.0.1:8000/echo',
+      `${import.meta.env.VITE_API_URL}/echo`,
       buildPreApprovalPayload({
         language,
         answers,
@@ -159,7 +159,7 @@ export default function useLoanWizard() {
     console.log('Sending find bank payload')
     setFindBankResponse(null)
     try {
-      const response = await fetch('http://127.0.0.1:8000/findback', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/findback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ export default function useLoanWizard() {
     if (!trimmedZip || isLastStep) return
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/validate-zipcode', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/validate-zipcode`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -359,7 +359,7 @@ export default function useLoanWizard() {
       formData.append('user_email', contactInfo.email)
       formData.append('user_name', `${contactInfo.firstName}_${contactInfo.lastName}`)
 
-      const response = await fetch('http://127.0.0.1:8000/uploadDocuments', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/uploadDocuments`, {
         method: 'POST',
         body: formData,
       })

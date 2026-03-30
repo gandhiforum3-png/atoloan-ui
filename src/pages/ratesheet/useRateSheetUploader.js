@@ -36,7 +36,7 @@ export default function useRateSheetUploader() {
       const fetchBanks = async () => {
         setIsLoadingBanks(true)
         try {
-          const response = await fetch('http://127.0.0.1:8000/credit-unions')
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/credit-unions`)
           if (!response.ok) {
             throw new Error('Failed to fetch banks list')
           }
@@ -87,7 +87,7 @@ export default function useRateSheetUploader() {
     setStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/credit-unions/${bankId}/ratesheet`)
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/credit-unions/${bankId}/ratesheet`)
       if (!response.ok) {
         throw new Error('Failed to fetch rate sheet')
       }
@@ -113,7 +113,7 @@ export default function useRateSheetUploader() {
     if (!window.confirm('Are you sure you want to delete this rate sheet?')) return
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/credit-unions/${selectedBankId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/credit-unions/${selectedBankId}`, {
         method: 'DELETE',
       })
 
@@ -136,7 +136,7 @@ export default function useRateSheetUploader() {
     setSaveStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/update', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ export default function useRateSheetUploader() {
       })
 
       if (viewMode === 'view-existing') {
-        const listResponse = await fetch('http://127.0.0.1:8000/credit-unions')
+        const listResponse = await fetch(`${import.meta.env.VITE_API_URL}/credit-unions`)
         if (listResponse.ok) {
           const data = await listResponse.json()
           const creditUnions = data.credit_unions || []
@@ -194,7 +194,7 @@ export default function useRateSheetUploader() {
     setRawResponse('')
     setSaveStatus({ type: '', message: '' })
     try {
-      const response = await fetch('http://127.0.0.1:8000/ratesheetuploader', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/ratesheetuploader`, {
         method: 'POST',
         body: formData,
       })
