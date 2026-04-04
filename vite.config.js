@@ -10,5 +10,6 @@ export default defineConfig({
     setupFiles: './tests/unit/setup.js',
     mockReset: true,
     restoreMocks: true,
+    include: ['tests/unit/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
   },
 })
