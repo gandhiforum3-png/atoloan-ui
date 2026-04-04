@@ -30,11 +30,11 @@
 
 ### Unit Tests — Hook Logic
 
-- [ ] **HOOK-01**: `useLoanWizard` advances stepIndex on `handleSelect`
-- [ ] **HOOK-02**: `useLoanWizard` skips cosigner steps when `'by-myself'` is selected
-- [ ] **HOOK-03**: `useLoanWizard` blocks advance in `handleContactInfoContinue` when required fields missing
-- [ ] **HOOK-04**: `useLoanWizard` blocks advance in `handleContactInfoContinue` on invalid email format
-- [ ] **HOOK-05**: `useLoanWizard` blocks advance when phone is not 10 digits
+- [x] **HOOK-01**: `useLoanWizard` advances stepIndex on `handleSelect`
+- [x] **HOOK-02**: `useLoanWizard` skips cosigner steps when `'by-myself'` is selected
+- [x] **HOOK-03**: `useLoanWizard` blocks advance in `handleContactInfoContinue` when required fields missing
+- [x] **HOOK-04**: `useLoanWizard` blocks advance in `handleContactInfoContinue` on invalid email format
+- [x] **HOOK-05**: `useLoanWizard` blocks advance when phone is not 10 digits
 
 ### E2E Tests — Loan Wizard
 

@@ -43,8 +43,8 @@
 
 **Plans:** 3 plans
 - [ ] 02-01-PLAN.md — Utility unit tests (loanCalculator, payloads, validators)
-- [ ] 02-02-PLAN.md — Component unit tests (StepOptions, ContactInfoForm, LanguageContext)
-- [ ] 02-03-PLAN.md — Hook unit tests (useLoanWizard navigation and validation guards)
+- [x] 02-02-PLAN.md — Component unit tests (StepOptions, ContactInfoForm, LanguageContext)
+- [x] 02-03-PLAN.md — Hook unit tests (useLoanWizard navigation and validation guards)
 
 ---
 
