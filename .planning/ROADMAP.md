@@ -30,19 +30,21 @@
 
 **Goal:** All pure functions, key components, and critical hook logic are covered by fast unit tests that run in milliseconds.
 
+**Requirements:** [UNIT-01, UNIT-02, UNIT-03, UNIT-04, COMP-01, COMP-02, COMP-03, COMP-04, HOOK-01, HOOK-02, HOOK-03, HOOK-04, HOOK-05]
+
 **Delivers:**
 - `tests/unit/loanCalculator.test.js` — calculatePayments() verified for happy path + edge cases
 - `tests/unit/payloads.test.js` — buildPreApprovalPayload() verified for correct shape and trimming
-- `tests/unit/validators.test.js` — all 13 validator functions tested for valid/invalid inputs
+- `tests/unit/validators.test.js` — all 16 validator functions tested for valid/invalid inputs
 - `tests/unit/StepOptions.test.jsx` — image rendering + broken image text fallback
 - `tests/unit/ContactInfoForm.test.jsx` — error display when contactInfoErrors array is non-empty
 - `tests/unit/LanguageContext.test.jsx` — toggle switches language, components re-render in Spanish
 - `tests/unit/useLoanWizard.test.js` — step advance, cosigner skip branch, contact validation guards
 
-**Plans:**
-1. Utility unit tests — `loanCalculator.test.js`, `payloads.test.js`, `validators.test.js`
-2. Component unit tests — `StepOptions.test.jsx`, `ContactInfoForm.test.jsx`, `LanguageContext.test.jsx`
-3. Hook unit tests — `useLoanWizard.test.js` covering navigation logic and inline validation guards
+**Plans:** 3 plans
+- [ ] 02-01-PLAN.md — Utility unit tests (loanCalculator, payloads, validators)
+- [ ] 02-02-PLAN.md — Component unit tests (StepOptions, ContactInfoForm, LanguageContext)
+- [ ] 02-03-PLAN.md — Hook unit tests (useLoanWizard navigation and validation guards)
 
 ---
 
