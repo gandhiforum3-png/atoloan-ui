@@ -41,8 +41,8 @@
 - `tests/unit/LanguageContext.test.jsx` — toggle switches language, components re-render in Spanish
 - `tests/unit/useLoanWizard.test.js` — step advance, cosigner skip branch, contact validation guards
 
-**Plans:** 3 plans
-- [ ] 02-01-PLAN.md — Utility unit tests (loanCalculator, payloads, validators)
+**Plans:** 3/3 plans complete
+- [x] 02-01-PLAN.md — Utility unit tests (loanCalculator, payloads, validators)
 - [x] 02-02-PLAN.md — Component unit tests (StepOptions, ContactInfoForm, LanguageContext)
 - [x] 02-03-PLAN.md — Hook unit tests (useLoanWizard navigation and validation guards)
 

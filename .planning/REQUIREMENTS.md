@@ -16,10 +16,10 @@
 
 ### Unit Tests — Utilities
 
-- [ ] **UNIT-01**: `calculatePayments()` returns correct monthly payment, total interest, total paid for known inputs
-- [ ] **UNIT-02**: `calculatePayments()` handles edge cases (zero down payment, minimum term)
-- [ ] **UNIT-03**: `buildPreApprovalPayload()` correctly trims and maps all fields to payload shape
-- [ ] **UNIT-04**: `validators.js` functions return correct error strings or null for valid/invalid inputs
+- [x] **UNIT-01**: `calculatePayments()` returns correct monthly payment, total interest, total paid for known inputs
+- [x] **UNIT-02**: `calculatePayments()` handles edge cases (zero down payment, minimum term)
+- [x] **UNIT-03**: `buildPreApprovalPayload()` correctly trims and maps all fields to payload shape
+- [x] **UNIT-04**: `validators.js` functions return correct error strings or null for valid/invalid inputs
 
 ### Unit Tests — Components
 
