@@ -6,7 +6,7 @@ const homeContent = {
     headline: 'Auto Financing \nThe Smart Way',
     heroList: [
       'No Personal Information Needed',
-      'Get Pre-Approved in 9 Simple Questions',
+      'Get Pre-Approved in 14 Simple Questions',
       'No Credit Check',
       'Discover Which Lender Has The Best Interest Rates In Your Area',
       'A Real Pre-Approval',
@@ -30,7 +30,7 @@ const homeContent = {
       'Upload documents easily and securely.',
     ],
     welcomeCopy:
-      'Welcome to Atoloans, the future in automotive loan pre-approval software that takes the guesswork out of which lender has the best interest rates. Our system matches you to your best lenders automatically from 1,000+ top credit unions and banks. By simply clicking through 9 questions (based on real-time approval factors), we streamline and enhance a fast approval. Welcome to DIGITAL RETAIL FINANCING bringing a more human(e) approach to automotive financing. We focus on a customer-first experience through instant pre-approvals and the best financing options.',
+      'Welcome to Atoloans, the future in automotive loan pre-approval software that takes the guesswork out of which lender has the best interest rates. Our system matches you to your best lenders automatically from 1,000+ top credit unions and banks. By simply clicking through 14 questions (based on real-time approval factors), we streamline and enhance a fast approval. Welcome to DIGITAL RETAIL FINANCING bringing a more human(e) approach to automotive financing. We focus on a customer-first experience through instant pre-approvals and the best financing options.',
     welcomeBullets: [
       'Qualified offers in minutes.',
       'Completely free to use.',
@@ -90,7 +90,7 @@ const homeContent = {
       'Suba documentos de manera fácil y segura.',
     ],
     welcomeCopy:
-      'Bienvenido a atoloans, el programa del futuro de pre-aprobaciones de préstamos de autos que elimina las dudas sobre cual financiera tiene los mejores intereses. Nuestro programa lo conecta con los mejores prestamistas automáticamente atrás de 1,000+ más principales de credit unions y bancos. Con solo responder 9 preguntas (basadas en factores de aprobación en tiempo real), facilitamos y mejoramos una aprobación rápida. Bienvenido a FINANCIERO DIGITAL, que aporta un enfoque más humano en el financiamiento de automóviles, nos centramos en una experiencia centrada en el cliente a través de las mejores opciones financieras. Una aprobación previa real sin el esfuerzo!',
+      'Bienvenido a atoloans, el programa del futuro de pre-aprobaciones de préstamos de autos que elimina las dudas sobre cual financiera tiene los mejores intereses. Nuestro programa lo conecta con los mejores prestamistas automáticamente atrás de 1,000+ más principales de credit unions y bancos. Con solo responder 14 preguntas (basadas en factores de aprobación en tiempo real), facilitamos y mejoramos una aprobación rápida. Bienvenido a FINANCIERO DIGITAL, que aporta un enfoque más humano en el financiamiento de automóviles, nos centramos en una experiencia centrada en el cliente a través de las mejores opciones financieras. Una aprobación previa real sin el esfuerzo!',
     welcomeBullets: [
       'Ofertas calificadas en minutos.',
       'Uso completamente gratuito.',
@@ -150,11 +150,16 @@ export default function Home() {
                   ))}
                 </ul>
               </div>
-              <p style={{ textAlign: 'left', paddingTop: '30px' }}>
-                <Link to="/loans">
-                  <img src={content.heroCtaImg} alt={content.heroCtaAlt} className="homebutton img-fluid" />
+              <div style={{ textAlign: 'left', paddingTop: '30px' }}>
+                <Link to="/loans" className="hero-cta-btn">
+                  {content.heroCtaAlt} →
                 </Link>
-              </p>
+                <div className="hero-trust-badges">
+                  {content.heroList.slice(0, 3).map((badge) => (
+                    <span key={badge} className="hero-trust-badge">{badge}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </header>
@@ -163,7 +168,7 @@ export default function Home() {
           <div className="container">
             <img
               src={content.preapprovedImg}
-              alt="Get Pre-Approved In 9 Clicks"
+              alt="Get Pre-Approved In 14 Clicks"
               style={{ paddingBottom: '25px', textAlign: 'center' }}
               className="img-fluid"
             />
@@ -281,14 +286,9 @@ export default function Home() {
                   </ul>
               </div>
                 <br />
-                <p style={{ textAlign: 'center' }}>
-                  <Link to="/loans">
-                    <img
-                      src={content.welcomeCtaImg}
-                      alt={content.welcomeCtaAlt}
-                      className="homebutton img-fluid"
-                      style={{ height: '70px', width: 'auto', float: 'left', cursor: 'pointer' }}
-                    />
+                <p style={{ textAlign: 'left', marginTop: '8px' }}>
+                  <Link to="/loans" className="hero-cta-btn" style={{ fontSize: '16px', padding: '14px 28px' }}>
+                    {content.welcomeCtaAlt} →
                   </Link>
                 </p>
               </div>
@@ -312,9 +312,9 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <p style={{ textAlign: 'center' }}>
-              <Link to="/loans">
-                <img src={content.finalCtaImg} alt={content.finalCtaAlt} className="homebutton img-fluid" />
+            <p style={{ textAlign: 'center', marginTop: '20px' }}>
+              <Link to="/loans" className="hero-cta-btn">
+                {content.finalCtaAlt} →
               </Link>
             </p>
           </div>

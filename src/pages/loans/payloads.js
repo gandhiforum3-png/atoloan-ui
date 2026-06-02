@@ -5,8 +5,6 @@ export const buildPreApprovalPayload = ({
   otherDownPayment,
   jobTitle,
   timeAtJobMonths,
-  monthlyDebt,
-  grossMonthlyIncome,
   zipCode,
   contactInfo,
   summary,
@@ -17,8 +15,6 @@ export const buildPreApprovalPayload = ({
   otherDownPayment: otherDownPayment.trim(),
   jobTitle: jobTitle.trim(),
   timeAtJobMonths,
-  monthlyDebt: monthlyDebt.trim(),
-  grossMonthlyIncome: grossMonthlyIncome.trim(),
   zipCode: zipCode.trim(),
   contactInfo: {
     firstName: contactInfo.firstName.trim(),
