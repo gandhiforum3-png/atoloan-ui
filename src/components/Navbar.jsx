@@ -8,16 +8,12 @@ const navLabels = {
     preApproved: 'Loan',
     calculator: 'Loan Calculator',
     ratesheet: 'Upload Ratesheet',
-    toggleAlt: 'Espanol',
-    toggleImg: '/images/espanolbutton.png',
   },
   es: {
     home: 'Hogar',
     preApproved: 'Prestamo',
-    calculator: 'Calculadora de Préstamos',
+    calculator: 'Calculadora',
     ratesheet: 'Subir Tarifario',
-    toggleAlt: 'English',
-    toggleImg: '/images/englishbutton.png',
   },
 }
 
@@ -68,16 +64,13 @@ export default function Navbar() {
         </div>
         <button
           type="button"
-          className="btn p-0 border-0 bg-transparent"
+          className="lang-toggle"
           onClick={toggleLanguage}
-          aria-label={labels.toggleAlt}
+          aria-label={language === 'en' ? 'Switch to Spanish' : 'Switch to English'}
         >
-          <img
-            src={labels.toggleImg}
-            alt={labels.toggleAlt}
-            className="imgbutton languagebutton"
-            style={{ height: '75px', width: 'auto' }}
-          />
+          <span className={language === 'en' ? 'lang-active' : 'lang-inactive'}>EN</span>
+          <span className="lang-separator">|</span>
+          <span className={language === 'es' ? 'lang-active' : 'lang-inactive'}>ES</span>
         </button>
       </div>
     </nav>

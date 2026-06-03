@@ -53,7 +53,7 @@ export default function LoanCalculator() {
         labels: ['Interest Paid', 'Loan Amount'],
         datasets: [
           {
-            backgroundColor: ['#5ab054', '#1b75bc'],
+            backgroundColor: ['#39b54a', '#1b75bc'],
             data: [result.totalInterestPaid.toFixed(2), result.loanAmount.toFixed(2)],
           },
         ],
@@ -94,116 +94,45 @@ export default function LoanCalculator() {
           <div className="row justify-content-evenly">
             <div className="col-md-4">
               <form id="loanCalc" className="">
-                <div className="col-md-12">
-                  <div className="form-group">
-                    <label htmlFor="vehiclePrice" style={{ paddingTop: '15px' }}>
-                      Vehicle Price
-                    </label>
-                    <br />
-                    <div style={{ float: 'left', padding: '5px 5px 0 0' }}>$</div>
-                    <div style={{ float: 'left', width: '95%' }}>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="vehiclePrice"
-                        placeholder="Vehicle Price"
-                        value={values.vehiclePrice}
-                        onChange={handleChange('vehiclePrice')}
-                      />
+                {[
+                  { id: 'vehiclePrice', label: 'Vehicle Price', prefix: '$', min: 0, max: 200000, step: 1000, key: 'vehiclePrice' },
+                  { id: 'downPayment', label: 'Down Payment', prefix: '$', min: 0, max: 200000, step: 500, key: 'downPayment' },
+                  { id: 'loanTerm', label: 'Loan Term (Months)', suffix: 'mo', min: 24, max: 120, step: 12, key: 'loanTerm' },
+                  { id: 'intRate', label: 'Interest Rate', suffix: '%', min: 0, max: 30, step: 0.01, key: 'interestRate' },
+                ].map(({ id, label, prefix, suffix, min, max, step, key }) => (
+                  <div key={id} className="col-md-12" style={{ marginBottom: '8px' }}>
+                    <div className="form-group">
+                      <label htmlFor={id} style={{ fontWeight: '600', fontSize: '13px', color: '#495057', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '6px', display: 'block' }}>
+                        {label}
+                      </label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {prefix && <span style={{ color: '#495057', fontWeight: '600' }}>{prefix}</span>}
+                        <input
+                          type="text"
+                          className="form-control"
+                          id={id}
+                          value={values[key]}
+                          onChange={handleChange(key)}
+                          style={{ flex: 1 }}
+                        />
+                        {suffix && <span style={{ color: '#495057', fontWeight: '600' }}>{suffix}</span>}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
+                        <span style={{ fontSize: '11px', color: '#adb5bd' }}>{prefix}{min}{suffix}</span>
+                        <input
+                          type="range"
+                          min={min}
+                          max={max}
+                          step={step}
+                          value={values[key]}
+                          style={{ flex: 1 }}
+                          onChange={handleChange(key)}
+                        />
+                        <span style={{ fontSize: '11px', color: '#adb5bd' }}>{prefix}{max}{suffix}</span>
+                      </div>
                     </div>
-                    <br />
-                    <input
-                      type="range"
-                      id="vehiclePriceSlider"
-                      min="0"
-                      max="200000"
-                      value={values.vehiclePrice}
-                      style={{ width: '100%' }}
-                      onChange={handleChange('vehiclePrice')}
-                    />
                   </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="form-group">
-                    <label htmlFor="downPayment" style={{ paddingTop: '15px' }}>
-                      Down Payment
-                    </label>
-                    <br />
-                    <div style={{ float: 'left', padding: '5px 5px 0 0' }}>$</div>
-                    <div style={{ float: 'left', width: '95%' }}>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="downPayment"
-                        placeholder="Down Payment"
-                        value={values.downPayment}
-                        onChange={handleChange('downPayment')}
-                      />
-                    </div>
-                    <br />
-                    <input
-                      type="range"
-                      id="downPaymentSlider"
-                      min="0"
-                      max="200000"
-                      value={values.downPayment}
-                      style={{ width: '100%' }}
-                      onChange={handleChange('downPayment')}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="form-group">
-                    <label htmlFor="loanTerm" style={{ paddingTop: '15px' }}>
-                      Loan Term Months
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="loanTerm"
-                      placeholder="Loan Term Months"
-                      value={values.loanTerm}
-                      onChange={handleChange('loanTerm')}
-                    />
-                    <input
-                      type="range"
-                      id="loanTermSlider"
-                      min="24"
-                      max="120"
-                      step="12"
-                      value={values.loanTerm}
-                      style={{ width: '100%' }}
-                      onChange={handleChange('loanTerm')}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="form-group">
-                    <label htmlFor="intRate" style={{ paddingTop: '15px' }}>
-                      Interest Rate
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="intRate"
-                      placeholder="Interest Rate"
-                      value={values.interestRate}
-                      onChange={handleChange('interestRate')}
-                      style={{ float: 'left', width: '95%' }}
-                    />
-                    <div style={{ float: 'right', padding: '5px 5px 0 0' }}>%</div>
-                    <input
-                      type="range"
-                      id="intRateSlider"
-                      min="0"
-                      max="30"
-                      step=".01"
-                      value={values.interestRate}
-                      style={{ width: '100%' }}
-                      onChange={handleChange('interestRate')}
-                    />
-                  </div>
-                </div>
+                ))}
                 <div className="clearfix"></div>
                 <div className="col-md-12">
                   <button
@@ -225,29 +154,21 @@ export default function LoanCalculator() {
             <div className="col-md-4">
               <div id="paymentresultsmobile"></div>
               <div id="paymentResults">
-                <p style={{ textAlign: 'center', fontSize: '20px', lineHeight: '50px' }}>
-                  Monthly Payment is:
-                  <br />
+                {!result && (
+                  <p style={{ textAlign: 'center', color: '#adb5bd', fontSize: '15px', padding: '20px 0' }}>
+                    Enter your loan details and click <strong>Calculate</strong> to see your estimate.
+                  </p>
+                )}
+                <p style={{ textAlign: 'center', fontSize: '14px', color: '#6c757d', marginBottom: '4px' }}>
+                  {result ? 'Monthly Payment' : ''}
                 </p>
-                <p
-                  style={{
-                    textAlign: 'center',
-                    fontSize: '35px',
-                    lineHeight: '18px',
-                    fontWeight: 'bold',
-                    paddingTop: '0px',
-                    marginTop: '-20px',
-                  }}
-                >
-                  ${result ? formatCurrency(result.monthlyPayment) : '---'}
-                  <span style={{ fontSize: '20px' }}>
-                    {' '}
-                    / Month for {result ? result.months / 12 : '---'} Years
-                  </span>
+                <p style={{ textAlign: 'center', fontSize: '42px', fontWeight: 'bold', margin: '0 0 4px', lineHeight: 1 }}>
+                  {result ? `$${formatCurrency(result.monthlyPayment)}` : ''}
+                  {result && <span style={{ fontSize: '16px', fontWeight: '400', color: '#6c757d' }}> / mo for {result.months / 12} yrs</span>}
                 </p>
                 <p style={{ textAlign: 'center', fontSize: '20px' }}>
                   Total Interest Paid:{' '}
-                  <span style={{ fontSize: '28px', color: '#5ab054' }}>
+                  <span style={{ fontSize: '28px', color: '#39b54a' }}>
                     ${result ? formatCurrency(result.totalInterestPaid) : '---'}
                   </span>
                 </p>

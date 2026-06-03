@@ -13,10 +13,9 @@ export default function useLoanWizard() {
   const [otherDownPayment, setOtherDownPayment] = useState('')
   const [jobTitle, setJobTitle] = useState('')
   const [timeAtJobMonths, setTimeAtJobMonths] = useState('')
-  const [monthlyDebt, setMonthlyDebt] = useState('')
-  const [grossMonthlyIncome, setGrossMonthlyIncome] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [, setZipValidationError] = useState('')
+  const [zipValidationError, setZipValidationError] = useState('')
+  const [isValidatingZip, setIsValidatingZip] = useState(false)
   const [emailValidationError, setEmailValidationError] = useState('')
   const [phoneValidationError, setPhoneValidationError] = useState('')
   const [contactInfoErrors, setContactInfoErrors] = useState([])
@@ -32,6 +31,7 @@ export default function useLoanWizard() {
   })
   const [hasSentPreApproval, setHasSentPreApproval] = useState(false)
   const [findBankResponse, setFindBankResponse] = useState(null)
+  const [isFindingBank, setIsFindingBank] = useState(false)
   const [brokenImages, setBrokenImages] = useState({})
   const [driversLicenseFile, setDriversLicenseFile] = useState(null)
   const [paycheckFile, setPaycheckFile] = useState(null)
@@ -70,14 +70,6 @@ export default function useLoanWizard() {
             return {
               label: item.title,
               value: `${option.alt} (${monthsLabel})`,
-            }
-          }
-          if (item.id === 'dti') {
-            const debtLabel = monthlyDebt ? `$${monthlyDebt}` : copy.notProvided
-            const incomeLabel = grossMonthlyIncome ? `$${grossMonthlyIncome}` : copy.notProvided
-            return {
-              label: item.title,
-              value: `${copy.summaryDebt}: ${debtLabel}, ${copy.summaryIncome}: ${incomeLabel}`,
             }
           }
           return { label: item.title, value: option.alt }
@@ -122,10 +114,8 @@ export default function useLoanWizard() {
       contactInfo.phone,
       contactInfo.state,
       contactInfo.zip,
-      grossMonthlyIncome,
       language,
       jobTitle,
-      monthlyDebt,
       otherDownPayment,
       otherMonthlyIncome,
       steps,
@@ -145,8 +135,6 @@ export default function useLoanWizard() {
         otherDownPayment,
         jobTitle,
         timeAtJobMonths,
-        monthlyDebt,
-        grossMonthlyIncome,
         zipCode,
         contactInfo,
         summary,
@@ -156,8 +144,8 @@ export default function useLoanWizard() {
   }
 
   const sendFindBankPayload = async () => {
-    console.log('Sending find bank payload')
     setFindBankResponse(null)
+    setIsFindingBank(true)
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/findback`, {
         method: 'POST',
@@ -173,8 +161,6 @@ export default function useLoanWizard() {
             otherDownPayment,
             jobTitle,
             timeAtJobMonths,
-            monthlyDebt,
-            grossMonthlyIncome,
             zipCode,
             contactInfo,
             summary,
@@ -183,10 +169,12 @@ export default function useLoanWizard() {
       })
       const data = await response.json()
       setFindBankResponse({ receivedAt: new Date().toISOString(), data })
+      setIsFindingBank(false)
       setStepIndex((prev) => prev + 1)
     } catch (error) {
       console.error('Failed to send find bank payload', error)
       setFindBankResponse({ error: 'Failed to fetch response.' })
+      setIsFindingBank(false)
       setStepIndex((prev) => prev + 1)
     }
   }
@@ -239,46 +227,35 @@ export default function useLoanWizard() {
     setStepIndex((prev) => prev + 1)
   }
 
-  const handleDtiContinue = () => {
-    if (!monthlyDebt.trim() || !grossMonthlyIncome.trim() || isLastStep) return
-    setStepIndex((prev) => prev + 1)
-  }
-
-  const handleDtiSkip = () => {
-    if (isLastStep) return
-    setStepIndex((prev) => prev + 1)
-  }
-
   const handleZipCodeContinue = async () => {
     const trimmedZip = zipCode.trim()
     if (!trimmedZip || isLastStep) return
 
+    setIsValidatingZip(true)
+    setZipValidationError('')
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/validate-zipcode`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ zipcode: trimmedZip }),
       })
       const data = await response.json()
       if (!data?.valid) {
-        const message = 'Please enter a valid zip code.'
-        setZipValidationError(message)
-        window.alert(message)
+        setZipValidationError('Please enter a valid zip code.')
+        setIsValidatingZip(false)
         return
       }
       if (data?.city) {
         setContactInfo((prev) => ({ ...prev, city: data.city }))
       }
     } catch {
-      const message = 'Unable to validate zip code. Please try again.'
-      setZipValidationError(message)
-      window.alert(message)
+      setZipValidationError('Unable to validate zip code. Please try again.')
+      setIsValidatingZip(false)
       return
     }
 
-    setZipValidationError('')
+    setIsValidatingZip(false)
     setContactInfo((prev) => ({ ...prev, zip: trimmedZip }))
     setStepIndex((prev) => prev + 1)
   }
@@ -387,6 +364,7 @@ export default function useLoanWizard() {
     copy,
     step,
     stepIndex,
+    stepsCount: steps.length,
     isLastStep,
     answers,
     summary,
@@ -404,16 +382,11 @@ export default function useLoanWizard() {
     timeAtJobMonths,
     setTimeAtJobMonths,
     handleTimeAtJobContinue,
-    // DTI
-    monthlyDebt,
-    setMonthlyDebt,
-    grossMonthlyIncome,
-    setGrossMonthlyIncome,
-    handleDtiContinue,
-    handleDtiSkip,
     // Zip code
     zipCode,
     setZipCode,
+    zipValidationError,
+    isValidatingZip,
     handleZipCodeContinue,
     // Contact info
     contactInfo,
@@ -424,6 +397,7 @@ export default function useLoanWizard() {
     handleContactInfoContinue,
     // Document upload
     findBankResponse,
+    isFindingBank,
     driversLicenseFile,
     setDriversLicenseFile,
     paycheckFile,

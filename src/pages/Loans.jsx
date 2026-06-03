@@ -1,9 +1,9 @@
 import useLoanWizard from './loans/useLoanWizard'
+import WizardProgress from '../components/WizardProgress'
 import StepOptions from './loans/StepOptions'
 import MonthlyIncomeInput from './loans/steps/MonthlyIncomeInput'
 import TimeAtJobInput from './loans/steps/TimeAtJobInput'
 import DownPaymentInput from './loans/steps/DownPaymentInput'
-import DtiCalculator from './loans/steps/DtiCalculator'
 import ZipCodeInput from './loans/steps/ZipCodeInput'
 import ContactInfoForm from './loans/steps/ContactInfoForm'
 import DocumentUpload from './loans/steps/DocumentUpload'
@@ -11,12 +11,14 @@ import ReviewSummary from './loans/steps/ReviewSummary'
 
 export default function Loans() {
   const wizard = useLoanWizard()
-  const { copy, step, stepIndex, isLastStep, answers, summary } = wizard
+  const { copy, step, stepIndex, stepsCount, isLastStep, answers, summary, isFindingBank } = wizard
 
   return (
     <section id="last">
       <div className="full">
         <div className="pagecontainer">
+          <WizardProgress stepIndex={stepIndex} totalSteps={stepsCount} />
+
           <form className="form-horizontal">
             <h1>{step.title}</h1>
             {step.question && step.question !== step.title && (
@@ -24,23 +26,31 @@ export default function Loans() {
                 {step.question}
               </p>
             )}
+
             <div className="lt">
               <div className="form-group">
                 <div className="col-sm-12 centered">
-                  {step.id === 'approval-info' && (
-                    <div style={{ marginBottom: '16px', textAlign: 'center' }}>
-                      <p style={{ marginBottom: '12px', maxWidth: '860px', marginLeft: 'auto', marginRight: 'auto' }}>
-                        {copy.approvalText}
-                      </p>
+
+                  {step.id === 'review' ? (
+                    <div style={{ marginTop: '24px' }}>
+                      <button
+                        type="button"
+                        className="hero-cta-btn"
+                        onClick={() => wizard.handleSelect('see-payment')}
+                        disabled={isFindingBank}
+                        style={{ fontSize: '18px', padding: '16px 48px' }}
+                      >
+                        {isFindingBank ? 'Finding your best lender…' : `${copy.seeMonthlyPayment} →`}
+                      </button>
                     </div>
+                  ) : (
+                    <StepOptions
+                      options={step.options}
+                      selectedValue={answers[step.id]}
+                      onSelect={wizard.handleSelect}
+                    />
                   )}
-                  <StepOptions
-                    options={step.options}
-                    selectedValue={answers[step.id]}
-                    onSelect={wizard.handleSelect}
-                    brokenImages={wizard.brokenImages}
-                    setBrokenImages={wizard.setBrokenImages}
-                  />
+
                   {step.id === 'review' && wizard.findBankResponse && (
                     <div style={{ marginTop: '16px', textAlign: 'left' }}>
                       <pre
@@ -57,6 +67,7 @@ export default function Loans() {
                       </pre>
                     </div>
                   )}
+
                   {step.id === 'monthly-income' && answers[step.id] === 'other' && (
                     <MonthlyIncomeInput
                       value={wizard.otherMonthlyIncome}
@@ -66,6 +77,7 @@ export default function Loans() {
                       copy={copy}
                     />
                   )}
+
                   {step.id === 'time-at-job' && (
                     <TimeAtJobInput
                       selectedValue={answers[step.id]}
@@ -82,6 +94,7 @@ export default function Loans() {
                       copy={copy}
                     />
                   )}
+
                   {step.id === 'down-payment' && answers[step.id] === 'other' && (
                     <DownPaymentInput
                       value={wizard.otherDownPayment}
@@ -91,27 +104,20 @@ export default function Loans() {
                       copy={copy}
                     />
                   )}
-                  {step.id === 'dti' && (
-                    <DtiCalculator
-                      monthlyDebt={wizard.monthlyDebt}
-                      grossMonthlyIncome={wizard.grossMonthlyIncome}
-                      onDebtChange={wizard.setMonthlyDebt}
-                      onIncomeChange={wizard.setGrossMonthlyIncome}
-                      onContinue={wizard.handleDtiContinue}
-                      onSkip={wizard.handleDtiSkip}
-                      disabled={!wizard.monthlyDebt.trim() || !wizard.grossMonthlyIncome.trim()}
-                      copy={copy}
-                    />
-                  )}
+
+
                   {step.id === 'zip-code' && (
                     <ZipCodeInput
                       value={wizard.zipCode}
                       onChange={wizard.setZipCode}
                       onContinue={wizard.handleZipCodeContinue}
                       disabled={!wizard.zipCode.trim()}
+                      isValidating={wizard.isValidatingZip}
+                      error={wizard.zipValidationError}
                       copy={copy}
                     />
                   )}
+
                   {step.id === 'contact-info' && (
                     <ContactInfoForm
                       contactInfo={wizard.contactInfo}
@@ -124,6 +130,7 @@ export default function Loans() {
                       copy={copy}
                     />
                   )}
+
                   {step.id === 'upload-documents' && (
                     <DocumentUpload
                       findBankResponse={wizard.findBankResponse}
@@ -137,14 +144,16 @@ export default function Loans() {
                       copy={copy}
                     />
                   )}
+
                   <br />
+
                   {stepIndex > 0 && (
                     <button
                       type="button"
-                      className="btn p-0 border-0 bg-transparent"
+                      className="wizard-back-btn"
                       onClick={wizard.handleBack}
                     >
-                      <img src="/images/leftarrow.png" alt={copy.back} className="arrowbutton" />
+                      ← {copy.back}
                     </button>
                   )}
                 </div>

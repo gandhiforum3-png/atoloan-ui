@@ -192,25 +192,13 @@ export const copyByLanguage = {
 }
 
 export const getSteps = (language, copy) => {
-  const img = (name) => `/images/${language === 'es' ? 'btn_esp' : 'btn_eng'}_${name}.png`
-
   return [
     {
       id: 'loan-type',
       title: copy.loanTypeTitle,
       options: [
-        {
-          value: 'autoloan',
-          img: img('autoloan'),
-          alt: copy.autoLoans,
-          label: copy.autoLoans,
-        },
-        {
-          value: 'autorefinance',
-          img: img('autorefinance'),
-          alt: copy.autoRefinance,
-          label: copy.autoRefinance,
-        },
+        { value: 'autoloan', icon: '🚗', label: copy.autoLoans },
+        { value: 'autorefinance', icon: '🔄', label: copy.autoRefinance },
       ],
     },
     {
@@ -218,228 +206,57 @@ export const getSteps = (language, copy) => {
       title: copy.cosignerTitle,
       question: copy.cosignerTitle,
       options: [
-        {
-          value: 'by-myself',
-          img: img('bymyself'),
-          alt: copy.byMyself,
-          label: copy.byMyself,
-        },
-        {
-          value: 'with-cosigner',
-          img: img('withacosigner'),
-          alt: copy.withCosigner,
-          label: copy.withCosigner,
-        },
-      ],
-    },
-    {
-      id: 'cosigner-relative',
-      title: copy.cosignerRelativeTitle,
-      options: [
-        {
-          value: 'relative',
-          img: img('relative'),
-          alt: copy.relative,
-          label: copy.relative,
-        },
-        {
-          value: 'non-relative',
-          img: img('nonrelative'),
-          alt: copy.nonRelative,
-          label: copy.nonRelative,
-        },
-      ],
-    },
-    {
-      id: 'same-address',
-      title: copy.sameAddressTitle,
-      options: [
-        {
-          value: 'same-address',
-          img: img('livesameaddress'),
-          alt: copy.livesSameAddress,
-          label: copy.livesSameAddress,
-        },
-        {
-          value: 'different-address',
-          img: img('nolivesameaddress'),
-          alt: copy.notSameAddress,
-          label: copy.notSameAddress,
-        },
+        { value: 'by-myself', icon: '👤', label: copy.byMyself },
+        { value: 'with-cosigner', icon: '👥', label: copy.withCosigner },
       ],
     },
     {
       id: 'employment',
       title: copy.employmentTitle,
       options: [
-        {
-          value: 'fulltime',
-          img: img('fulltime'),
-          alt: copy.fullTime,
-          label: copy.fullTime,
-        },
-        {
-          value: 'parttime',
-          img: img('parttime'),
-          alt: copy.partTime,
-          label: copy.partTime,
-        },
-        {
-          value: 'tempseasonal',
-          img: img('tempseasonal'),
-          alt: copy.tempSeasonal,
-          label: copy.tempSeasonal,
-        },
-        {
-          value: 'selfemployed',
-          img: img('selfemployed'),
-          alt: copy.selfEmployed,
-          label: copy.selfEmployed,
-        },
-        {
-          value: 'ssiretired',
-          img: img('ssiretired'),
-          alt: copy.ssiRetired,
-          label: copy.ssiRetired,
-        },
-        {
-          value: 'military',
-          img: img('military'),
-          alt: copy.military,
-          label: copy.military,
-        },
-        {
-          value: 'disability',
-          img: img('disability'),
-          alt: copy.disability,
-          label: copy.disability,
-        },
+        { value: 'fulltime', icon: '💼', label: copy.fullTime },
+        { value: 'parttime', icon: '⏰', label: copy.partTime },
+        { value: 'tempseasonal', icon: '🌿', label: copy.tempSeasonal },
+        { value: 'selfemployed', icon: '🧾', label: copy.selfEmployed },
+        { value: 'ssiretired', icon: '🏦', label: copy.ssiRetired },
+        { value: 'military', icon: '🎖️', label: copy.military },
+        { value: 'disability', icon: '♿', label: copy.disability },
       ],
     },
     {
       id: 'proof-of-income',
       title: copy.proofIncomeTitle,
       options: [
-        {
-          value: 'paystub',
-          img: img('paystub'),
-          alt: copy.paystub,
-          label: copy.paystub,
-        },
-        {
-          value: 'w2',
-          img: img('w2'),
-          alt: copy.w2,
-          label: copy.w2,
-        },
-        {
-          value: 'taxes',
-          img: img('taxes'),
-          alt: copy.taxes,
-          label: copy.taxes,
-        },
-        {
-          value: 'taxes-2-years',
-          img: img('taxes2years'),
-          alt: copy.taxes2Years,
-          label: copy.taxes2Years,
-        },
-        {
-          value: '1099',
-          img: img('1099'),
-          alt: copy.form1099,
-          label: copy.form1099,
-        },
-        {
-          value: 'proof-of-benefits',
-          img: img('proofofbenefits'),
-          alt: copy.proofBenefits,
-          label: copy.proofBenefits,
-        },
-        {
-          value: 'reward-letter',
-          img: img('rewardletter'),
-          alt: copy.rewardLetter,
-          label: copy.rewardLetter,
-        },
+        { value: 'paystub', icon: '📄', label: copy.paystub },
+        { value: 'w2', icon: '📋', label: copy.w2 },
+        { value: 'taxes', icon: '📊', label: copy.taxes },
+        { value: 'taxes-2-years', icon: '📅', label: copy.taxes2Years },
+        { value: '1099', icon: '🔢', label: copy.form1099 },
+        { value: 'proof-of-benefits', icon: '💊', label: copy.proofBenefits },
+        { value: 'reward-letter', icon: '✉️', label: copy.rewardLetter },
       ],
     },
     {
       id: 'monthly-income',
       title: copy.monthlyIncomeTitle,
       options: [
-        {
-          value: '2000',
-          img: img('2000monthly'),
-          alt: `$2,000 ${copy.monthlyAmountLabel}`,
-          label: `$2,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '2500',
-          img: img('2500monthly'),
-          alt: `$2,500 ${copy.monthlyAmountLabel}`,
-          label: `$2,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '3000',
-          img: img('3000monthly'),
-          alt: `$3,000 ${copy.monthlyAmountLabel}`,
-          label: `$3,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '3500',
-          img: img('3500monthly'),
-          alt: `$3,500 ${copy.monthlyAmountLabel}`,
-          label: `$3,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '4000',
-          img: img('4000monthly'),
-          alt: `$4,000 ${copy.monthlyAmountLabel}`,
-          label: `$4,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '4500',
-          img: img('4500monthly'),
-          alt: `$4,500 ${copy.monthlyAmountLabel}`,
-          label: `$4,500 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: '5000',
-          img: img('5000monthly'),
-          alt: `$5,000 ${copy.monthlyAmountLabel}`,
-          label: `$5,000 ${copy.monthlyAmountLabel}`,
-        },
-        {
-          value: 'other',
-          img: img('othermonthly'),
-          alt: copy.other,
-          label: copy.other,
-        },
+        { value: '2000', icon: '💰', label: `$2,000 ${copy.monthlyAmountLabel}` },
+        { value: '2500', icon: '💰', label: `$2,500 ${copy.monthlyAmountLabel}` },
+        { value: '3000', icon: '💰', label: `$3,000 ${copy.monthlyAmountLabel}` },
+        { value: '3500', icon: '💰', label: `$3,500 ${copy.monthlyAmountLabel}` },
+        { value: '4000', icon: '💰', label: `$4,000 ${copy.monthlyAmountLabel}` },
+        { value: '4500', icon: '💰', label: `$4,500 ${copy.monthlyAmountLabel}` },
+        { value: '5000', icon: '💰', label: `$5,000 ${copy.monthlyAmountLabel}` },
+        { value: 'other', icon: '✏️', label: copy.other },
       ],
     },
     {
       id: 'time-at-job',
       title: copy.timeAtJobTitle,
       options: [
-        {
-          value: 'over2years',
-          img: img('over2years'),
-          alt: copy.over2Years,
-          label: copy.over2Years,
-        },
-        {
-          value: '1-2years',
-          img: img('12years'),
-          alt: copy.oneToTwoYears,
-          label: copy.oneToTwoYears,
-        },
-        {
-          value: 'lessthanayear',
-          img: img('lessthanayear'),
-          alt: copy.lessThanYear,
-          label: copy.lessThanYear,
-        },
+        { value: 'over2years', icon: '⏳', label: copy.over2Years },
+        { value: '1-2years', icon: '📆', label: copy.oneToTwoYears },
+        { value: 'lessthanayear', icon: '🔰', label: copy.lessThanYear },
       ],
     },
     {
@@ -447,66 +264,21 @@ export const getSteps = (language, copy) => {
       title: copy.driversLicenseTitle,
       question: copy.driversLicenseTitle,
       options: [
-        {
-          value: 'yes',
-          img: img('yes'),
-          alt: copy.yes,
-          label: copy.yes,
-        },
-        {
-          value: 'no',
-          img: img('no'),
-          alt: copy.no,
-          label: copy.no,
-        },
+        { value: 'yes', icon: '✅', label: copy.yes },
+        { value: 'no', icon: '❌', label: copy.no },
       ],
     },
     {
       id: 'down-payment',
       title: copy.downPaymentTitle,
       options: [
-        {
-          value: '0down',
-          img: img('0down'),
-          alt: '$0',
-          label: '$0',
-        },
-        {
-          value: '1000-1500',
-          img: img('1000to1500down'),
-          alt: '$1,000-$1,500',
-          label: '$1,000-$1,500',
-        },
-        {
-          value: '2000-2500',
-          img: img('2000to2500down'),
-          alt: '$2,000-$2,500',
-          label: '$2,000-$2,500',
-        },
-        {
-          value: '3000-3500',
-          img: img('3000to3500down'),
-          alt: '$3,000-$3,500',
-          label: '$3,000-$3,500',
-        },
-        {
-          value: '4000-4500',
-          img: img('4000to4500down'),
-          alt: '$4,000-$4,500',
-          label: '$4,000-$4,500',
-        },
-        {
-          value: '5000-6500',
-          img: img('5000to6500down'),
-          alt: '$5,000-$6,500',
-          label: '$5,000-$6,500',
-        },
-        {
-          value: 'other',
-          img: img('otheramountdown'),
-          alt: copy.other,
-          label: copy.other,
-        },
+        { value: '0down', icon: '💸', label: '$0' },
+        { value: '1000-1500', icon: '💵', label: '$1,000-$1,500' },
+        { value: '2000-2500', icon: '💵', label: '$2,000-$2,500' },
+        { value: '3000-3500', icon: '💵', label: '$3,000-$3,500' },
+        { value: '4000-4500', icon: '💵', label: '$4,000-$4,500' },
+        { value: '5000-6500', icon: '💵', label: '$5,000-$6,500' },
+        { value: 'other', icon: '✏️', label: copy.other },
       ],
     },
     {
@@ -514,67 +286,17 @@ export const getSteps = (language, copy) => {
       title: copy.ssnItinTitle,
       question: copy.ssnItinTitle,
       options: [
-        {
-          value: 'social-security',
-          img: img('socialsecurity'),
-          alt: copy.socialSecurity,
-          label: copy.socialSecurity,
-        },
-        {
-          value: 'itin',
-          img: img('itin'),
-          alt: copy.itin,
-          label: copy.itin,
-        },
+        { value: 'social-security', icon: '🔒', label: copy.socialSecurity },
+        { value: 'itin', icon: '🌍', label: copy.itin },
       ],
-    },
-    {
-      id: 'dti',
-      title: copy.dtiTitle,
-      options: [],
     },
     {
       id: 'repo-history',
       title: copy.repoTitle,
       question: copy.repoTitle,
       options: [
-        {
-          value: 'repo-yes',
-          img: img('repoyes'),
-          alt: copy.yes,
-          label: copy.yes,
-        },
-        {
-          value: 'repo-no',
-          img: img('repono'),
-          alt: copy.no,
-          label: copy.no,
-        },
-      ],
-    },
-    {
-      id: 'residence-time',
-      title: copy.residenceTimeTitle,
-      question: copy.residenceTimeTitle,
-      options: [
-        {
-          value: 'over2years',
-          img: img('over2years'),
-          alt: copy.over2Years,
-          label: copy.over2Years,
-        },
-        {
-          value: 'over1year',
-          img: img('over1year'),
-          alt: copy.over1Year,
-          label: copy.over1Year,
-        },
-        {
-          value: 'under1year',
-          img: img('under1year'),
-          alt: copy.under1Year,
-          label: copy.under1Year,
-        },
+        { value: 'repo-yes', icon: '⚠️', label: copy.yes },
+        { value: 'repo-no', icon: '✅', label: copy.no },
       ],
     },
     {
@@ -584,24 +306,6 @@ export const getSteps = (language, copy) => {
       options: [],
     },
     {
-      id: 'approval-info',
-      title: copy.approvalTitle,
-      options: [
-        {
-          value: 'continue',
-          img: img('continue'),
-          alt: copy.continue,
-          label: copy.continue,
-        },
-        {
-          value: 'exit',
-          img: img('exit'),
-          alt: copy.exit,
-          label: copy.exit,
-        },
-      ],
-    },
-    {
       id: 'contact-info',
       title: copy.contactTitle,
       options: [],
@@ -609,14 +313,7 @@ export const getSteps = (language, copy) => {
     {
       id: 'review',
       title: copy.reviewTitle,
-      options: [
-        {
-          value: 'see-payment',
-          img: null,
-          alt: copy.seeMonthlyPayment,
-          label: copy.seeMonthlyPayment,
-        },
-      ],
+      options: [],
     },
     {
       id: 'upload-documents',
