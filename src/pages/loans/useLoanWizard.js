@@ -334,6 +334,8 @@ export default function useLoanWizard() {
       formData.append('drivers_license', driversLicenseFile)
       formData.append('paycheck', paycheckFile)
       formData.append('user_email', contactInfo.email)
+      formData.append('first_name', contactInfo.firstName)
+      formData.append('last_name', contactInfo.lastName)
       formData.append('user_name', `${contactInfo.firstName}_${contactInfo.lastName}`)
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/uploadDocuments`, {
